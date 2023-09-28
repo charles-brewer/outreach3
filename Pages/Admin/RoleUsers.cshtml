@@ -1,0 +1,80 @@
+﻿@page
+@model outreach3.Pages.Admin.RoleUsersModel
+@inject IServiceProvider Service;
+@{
+    ViewData["Title"] = "UserRoles";
+}
+
+<h4>UserRoles</h4>
+<div class="rightDiv">
+    <a asp-page="./AdminMenu">Return to Menu</a>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+           
+            <table>
+                <tr style="vertical-align:top;">
+                    <td>
+                        <div class="selectRoles">
+                            <div class="selectChurchHeader">All Roles</div><hr />
+                            
+                                @foreach (var role in Model.AllRoles)
+                                {
+                                    <span class="linkInput">
+
+                                    <input class="linkInputDark" type="submit" asp-page-handler="SelectRole" asp-route-role="@role.ToString()" value="@role.ToString()">
+                                    </span> <br />
+                                }
+                           
+                        </div>
+                    </td>
+                  
+                   
+                     <td>
+                        <div class="selectRoles">
+                            <div class="selectChurchHeader">Users</div><hr />
+                            
+                                @foreach (var user in Model.Users)
+                                {
+                                            <span class="linkInput">
+                                            <input class="linkInputDark" type="submit" value="@user.UserName" /></span> <br/>
+
+                                }
+
+                            
+                        </div>     
+                    </td>
+                </tr>
+            </table>   
+             <input type="hidden" name=selectedChurch />
+             <input type="hidden" name="inpRemoveRoleUser" />
+             <input type="hidden" name="inpRemoveRoleRole" />
+              <input type="hidden" name="inpAddRoleUser" />
+             <input type="hidden" name="inpAddRoleRole" />
+        
+         </form>
+    </div>
+</div>
+
+<script>
+ 
+    function removeRoleFromUser(u, r)
+    {        
+        document.getElementsByName("inpRemoveRoleUser")[0].value = u;
+        document.getElementsByName("inpRemoveRoleRole")[0].value = r;
+    }
+    
+    function addRoleToUser(u, r)
+    {   
+        document.getElementsByName("inpAddRoleUser")[0].value = u;
+        document.getElementsByName("inpAddRoleRole")[0].value = r;
+    }
+
+
+</script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,193 @@
+﻿@page
+@model outreach3.Pages.ChurchMap.EditModel
+
+@{
+    ViewData["Title"] = "Map";
+}
+
+<script>
+    //Global Variables
+    var mapData = { lat:30.33367926935318, lng: -81.65979765501024 };
+    var mapZoom = 10;
+    var map;  
+    var mapMarkers = new Array();
+    var geocoder;
+    var infoWindow;
+
+
+
+    var markerCounter = 1;
+    var selectedMarker;
+     var mapMarkerData="";
+     var movedMapMarkers="";
+    /*****************************Initialize the Map************************************/
+    async function initMap() 
+    {
+
+         /*******Create GeoCoder Objects******* */
+        geocoder = new google.maps.Geocoder;
+        infoWindow= new google.maps.InfoWindow();
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 11,
+            mapTypeId: 'hybrid'
+        });
+
+        document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+        var centerData = mapData;
+        var mapCenter = JSON.stringify(centerData);
+        var mapCenterObj = JSON.parse(mapCenter);
+        var myLat = mapCenterObj.lat;
+        var myLong = mapCenterObj.lng;
+        
+        map.setCenter(new google.maps.LatLng(myLat, myLong));
+
+        
+        /******Insert Markers from database******/
+        @foreach (var marker in Model.Markers.ToList().OrderBy(m=>m.Number))
+        {       
+            <text>var slatlng = "@marker.LatLng"; </text>       
+            <text>var address = "@marker.Title"; </text>
+            <text>var markerNumber = @marker.Number.ToString(); </text>
+            <text>SetMarkersInMapOnLoad(slatlng); </text>        
+        }
+
+        /***************Set Map Properties *******************/
+        map.setTilt(parseInt(document.getElementById("inpMapTilt").value));
+        map.setHeading(parseInt(document.getElementById("inpMapHeading").value));
+
+        /*****************Add Click Event******************************/
+        google.maps.event.addListener(map, 'click', function (event) {
+            addMarker(event.latLng, false);
+        });
+        /*****************Add Center Changed Event******************************/
+        google.maps.event.addListener(map, 'center_changed', function () {
+            UpdateCoordinates(map.getCenter());
+        });
+        /*****************Add zoom Event******************************/
+        google.maps.event.addListener(map, 'zoom_changed', function () {
+            UpdateZoom(map.getZoom());
+        })
+    }
+    /******************************************************************************* */
+   
+
+    function SetMarkersInMapOnLoad(latlng) 
+    {      
+      var latlngParts = latlng.replace("(", "").replace(")", "").split(",");        
+      var slatlng = JSON.parse("{\"lat\": " + latlngParts[0].toString() + ", \"lng\": " + latlngParts[1].toString() + "}"); 
+      addMarker(slatlng, true);
+     
+    }
+
+    
+     function  addMarker(location, canDelete) 
+     {    
+         var number = mapMarkers.length + 1;
+         /*  1:  Set Color and Label  */
+         setColors(number);         
+         var oneToEight = number;
+         while(oneToEight > 8)
+         {
+             oneToEight-=8;
+         }         
+        /* 2:  Create Marker  */
+         var marker = new google.maps.Marker({
+            position: location,                       
+            icon: "https://wfwcoutreach.com/wwwroot/Images/" + markColor + ".png",
+            forecolor: foreColor,
+            draggable: true,
+            label: oneToEight.toString(),   
+            tag: number,
+            map: map
+        }); 
+        //  3: Geocode the infowindow        
+        geocodeLatLng(location, marker);        
+          //  5: Add the Marker to the collection
+         mapMarkers.push(marker);
+         
+    }
+
+     function geocodeLatLng(latlng, marker) 
+    {        
+        geocoder
+            .geocode({ location: latlng })
+            .then((response) => {
+                if (response.results[0]) {
+                    infoWindow.setContent(response.results[0].formatted_address);
+                    marker.setTitle(response.results[0].formatted_address);
+
+                } else {
+                    window.alert("No results found");
+                }
+            })
+            .catch((e) => window.alert("Geocoder failed due to: " + e));
+    }
+    
+    var markColor = "blue";
+    var foreColor = "white";
+    
+    function setColors(num)
+    {
+
+        while(num > 48)
+        {
+            num-=48;
+        }
+
+          if(num > 0 && num < 9)
+            {
+                markColor= "blue";
+                foreColor= "white";
+            }
+            if (num > 8 && num < 17)
+            {
+                markColor= "brown";
+                foreColor= "white";
+            }
+            if (num > 16 && num < 25)
+            {
+                markColor= "green";
+                foreColor= "white";
+            }
+            if (num > 24 && num < 33)
+            {
+                markColor= "red";
+                foreColor= "white";
+            }
+            if (num > 32 && num < 41)
+            {
+                markColor= "white";
+                foreColor= "navy";
+            }
+            if (num > 40)
+            {
+                markColor= "yellow";
+                foreColor= "navy";
+            }
+            
+         
+    }
+
+                     
+        
+
+</script>
+<form method="post">
+   
+    <div style="text-align:right;"><a asp-page="./ChurchesMenu"  asp-route-churchId=@Request.Query["churchId"] >Return to Menu</a></div>
+     <hr />
+
+<p class="shadow">This map is not intended to be functional, it simply displays all of the markers for every mission of the church.  Zoom in and Pan to the area(s) where the missions are located.</p>
+
+     <div id="map" name="map" style="font-size:1px;border: 2px;width:1024px;height:1024px; background-color:blue"></div>     
+  
+</form>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuVWRgSV46wxc7yQlBo3p5pfiwxd7wA3w&callback=initMap" async defer></script>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

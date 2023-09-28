@@ -1,0 +1,67 @@
+﻿@page
+@model outreach3.Pages.ChurchGoals.DetailsModel
+
+<div>
+    <div style="text-align:right;"><a asp-page="./Index" asp-route-churchId="@Request.Query["churchId"]">Return to Church Goals</a></div>
+   
+    <h4>@Model.ChurchGoal.Name</h4>
+    <hr />
+    <dl class="row">
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ChurchGoal.StartDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ChurchGoal.StartDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ChurchGoal.GoalDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ChurchGoal.GoalDate)
+        </dd>       
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ChurchGoal.NumberOfDoorsGoal)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ChurchGoal.NumberOfDoorsGoal)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ChurchGoal.NumberOfGreetsGoal)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ChurchGoal.NumberOfGreetsGoal)
+        </dd>
+    </dl>
+</div>
+
+
+
+<hr />
+
+<table style="width:100%">
+    <tr>
+        <td style="width:50%;">
+            <div class="chart-container">
+                <canvas id="myChart"></canvas>
+            </div>
+        </td>
+        <td style="width:50%;">
+            <div class="chart-container">
+                <canvas id="myChart2"></canvas>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+
+        var ctx = document.getElementById('myChart');
+        var myChart = new Chart(ctx, @Html.Raw(Model.ChartJson) );
+
+        var ctx2 = document.getElementById('myChart2');
+        var myChart2 = new Chart(ctx2, @Html.Raw(Model.ChartJson2) );
+
+    });
+</script>

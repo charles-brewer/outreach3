@@ -1,0 +1,63 @@
+﻿@page
+@model outreach3.Pages.Admin.AdminMenuModel
+
+
+<h4> Admin Menu</h4>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <tr>
+            <td>
+                <a class="linkInput" asp-page="/Members/Index">Approve Church Members</a>
+            </td>
+
+            <td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a  class="linkInput" asp-page="./UserRoles">Assign User Roles</a>
+                }
+            </td>
+            <td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a class="linkInput" asp-page="./RoleUsers">View Roles by User</a>
+                }
+            </td>
+            <td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a class="linkInput" asp-page="./AllUsers">Edit Users</a>
+                }
+            </td>
+            <td>
+                @if (User.IsInRole("Admin") || User.IsInRole("ChurchAdmin"))
+                {
+                    <table>
+                        <tr><td colspan="3">Set Goals<hr /></td></tr>
+                    @foreach (var church in Model.Churches)
+                    {
+                        <tr>
+                            <td>@church.Name</td><td style="width:20px;"></td>
+                            <td><a asp-page="../ChurchGoals/Index" asp-route-churchId="@church.ChurchId">Set Goals</a></td>
+                        </tr>
+
+                    }
+                    </table>
+                }
+            </td>
+            
+        </tr>
+
+    </tbody>
+</table>

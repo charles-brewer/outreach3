@@ -1,0 +1,55 @@
+﻿@page
+@model             CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<h4>Create Church</h4>
+<div style="text-align:right">
+    <a asp-page="Index">Return to Church List</a>
+</div>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Church.Name" class="control-label"></label>
+                <input asp-for="Church.Name" class="form-control" />
+                <span asp-validation-for="Church.Name" class="text-danger"></span>
+            </div>          
+          
+            <div class="form-group">
+                <label asp-for="Church.ChurchFullName" class="control-label"></label>
+                <input asp-for="Church.ChurchFullName" class="form-control" />
+                <span asp-validation-for="Church.ChurchFullName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Church.ChurchAddress" class="control-label"></label>
+                <input asp-for="Church.ChurchAddress" class="form-control" />
+                <span asp-validation-for="Church.ChurchAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Church.ChurchPhone" class="control-label"></label>
+                <input asp-for="Church.ChurchPhone" class="form-control" />
+                <span asp-validation-for="Church.ChurchPhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Church.PastorsName" class="control-label"></label>
+                <input asp-for="Church.PastorsName" class="form-control" />
+                <span asp-validation-for="Church.PastorsName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,66 @@
+﻿@page
+@model outreach3.Pages.Residents.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Resident</h4>
+    <hr />
+    <dl class="row">
+       
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Resident.HomePhone)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Resident.HomePhone)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Resident.Address)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Resident.Address)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Resident.IsProtected)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Resident.IsProtected)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Resident.Apt)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Resident.Apt)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Resident.FirstName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Resident.FirstName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Resident.LastName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Resident.LastName)
+        </dd>      
+        
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Resident.number)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Resident.number)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="Resident.ResidentId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

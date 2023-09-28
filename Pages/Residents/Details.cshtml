@@ -1,0 +1,62 @@
+﻿@page
+@model outreach3.Pages.Residents.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Resident</h4>
+    <hr />
+    <dl class="row">
+       
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Resident.HomePhone)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Resident.HomePhone)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Resident.Address)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Resident.Address)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Resident.IsProtected)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Resident.IsProtected)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Resident.Apt)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Resident.Apt)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Resident.FirstName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Resident.FirstName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Resident.LastName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Resident.LastName)
+        </dd>     
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Resident.number)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Resident.number)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Resident?.ResidentId">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

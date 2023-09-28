@@ -1,0 +1,70 @@
+﻿@page
+@model outreach3.Pages.ChurchGoals.IndexModel
+
+<h4>Church Goals</h4>
+<p>
+    <a asp-page="Create" asp-route-churchId="@Request.Query["churchId"]">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ChurchGoals[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ChurchGoals[0].StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ChurchGoals[0].GoalDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ChurchGoals[0].NumberOfDoors)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ChurchGoals[0].NumberOfConnections)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ChurchGoals[0].NumberOfDoorsGoal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ChurchGoals[0].NumberOfGreetsGoal)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.ChurchGoals) {
+        <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GoalDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfDoors)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfConnections)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfDoorsGoal)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfGreetsGoal)
+            </td>
+            <td>
+                    <a asp-page="./Details" asp-route-churchId="@item.ChurchId">Details</a>
+                    @if (User.IsInRole("ChurchAdmin") || User.IsInRole("Admin"))
+                {
+                <a asp-page="./Edit" asp-route-churchId="@item.ChurchId">Edit</a> 
+                <a asp-page="./Delete" asp-route-churchId="@item.ChurchGoalId">Delete</a>
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

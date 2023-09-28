@@ -1,0 +1,213 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem lime, 0 0 0 0.25rem lime;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.table7{
+
+    width:1200px;
+    text-align:left;
+    border:3px navy double;    
+}
+
+.td7{
+    width:400px;
+    background-color:#ededed;
+    border-bottom: 1px solid gray;
+}
+.tdAlignRightAndSmall {
+    width: 400px;
+    text-align:center;
+    font-size: 14px;
+}
+
+
+
+.wfwcStatusCards {
+    border: 2px;
+    border-color:  #7682B4;
+    border-radius: 18px 18px 18px 18px;
+    box-shadow: 0px 0px 5px 5px inset #7682B4;
+    padding: 10px;
+    padding-right: 24px;
+    background-color: #fefefe;
+    vertical-align: top;
+}
+
+.wfwcStatusCardsTable {
+    border-radius: 8px 8px 8px 8px;
+    display: inline-table;
+}
+
+.wfwcStatusCardsRow {
+    vertical-align: top;
+}
+
+
+.wfwcStatusCardsHeader {
+    text-align: center;
+    text-shadow: 1px 1px 3px navy, 0 0 1em navy, 0 0 0.1em navy;
+    font-size: larger;
+}
+
+.wfwcStatusCardsColumn {
+    padding-right: 12px;
+    padding-left: 12px;
+    text-align: center;
+    text-shadow: 1px 1px 1px gray, 0 0 1em gray, 0 0 0.1em gray;
+}
+
+.wfwcStatusCardsColumnHeader {
+    text-align: center;
+    text-decoration: underline;
+    font-weight: normal;
+    text-shadow: 1px 1px 2px navy, 0 0 1em gray, 0 0 0.1em gray;
+    padding-right: 12px;
+    padding-left: 12px;
+}
+
+.centerDiv {
+    text-align: center;
+}
+.rightDiv {
+    text-align: right;
+}
+
+.selectChurchHeader2 {
+    text-align: center;
+    font-weight: bold;
+    font-size: larger;
+    text-shadow: 1px 1px skyblue;
+    color: navy;
+    font-weight:bold;
+    text-decoration:underline;
+    border-bottom:3px double black;
+    background-color:lightyellow;
+    
+}
+
+.selectChurchHeader {
+    text-align: center;
+    font-weight: bold;
+    font-size: larger;
+    text-shadow: 1px 1px skyblue;
+    color: navy;
+}
+
+.selectChurchHeaderLeft {
+    text-align: left;
+    font-weight: bold;
+    color: navy;
+}
+
+.selectChurch {
+    border: 1px solid #dddddd;
+    width: 240px;
+    text-align: center;
+    margin:0px 20px 0px 0px;
+}
+.selectChurchLeft {
+    border: 1px solid #dddddd;
+    width: 240px;
+    text-align: left;
+    margin: 0px 20px 0px 0px;
+}
+
+.selectRoles {
+    border: 1px solid #dddddd;
+    width: 320px;
+    text-align: left;
+    margin: 0px 20px 0px 0px;
+}
+
+.linkInput {
+    background: none;
+    border: none;
+    color: navy;
+    cursor: pointer;
+}
+
+.linkInputDark {
+    background: #ededed;
+    border: none;
+    color: navy;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.shadow {
+    background: none;
+    border: none;
+    color: navy;
+    text-shadow: 1px 1px skyblue;
+}
+
+.shadowRed {
+    background: none;
+    border: none;
+    color: red;
+    text-shadow: 1px 1px yellow;
+}
+
+.shadowGreen {
+    background: none;
+    border: 2px outset #dddddd;
+    color: green;
+    text-shadow: 1px 1px lightgreen;
+}
+
+.linkInput {
+    background: none;
+    border: none;
+    color: navy;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: normal;
+    text-shadow: 1px 1px skyblue;
+}
+
+.linkInputBold {
+    background: none;
+    border: none;
+    color: navy;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: bold;
+    text-shadow: 1px 1px skyblue;
+}
+
+.gray{
+    color:#dddddd;
+}
+
+h4 {
+    text-shadow: 1px 1px skyblue;
+    color: navy;
+}
+a {
+    text-shadow: 1px 1px skyblue;
+    color: navy;
+}
+
+td {
+    text-shadow: 1px 1px steelblue;
+    color: black;
+}

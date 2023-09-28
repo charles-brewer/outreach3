@@ -1,0 +1,95 @@
+﻿@page
+@model             IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+
+<h4>My Churches</h4>
+
+<p>
+     @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-page="Create">Create New</a>
+                    }
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Churches[0].Name)
+            </th>          
+         
+            <th>
+                @Html.DisplayNameFor(model => model.Churches[0].ChurchFullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Churches[0].ChurchAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Churches[0].ChurchPhone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Churches[0].PastorsName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in @Model.Churches) {
+    
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>            
+          
+            <td>
+                @Html.DisplayFor(modelItem => item.ChurchFullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChurchAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChurchPhone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PastorsName)
+            </td>
+            <td>
+                    @if (Model.ChurchAccessIsAppoved(item.ChurchId, @Model.MemberId) || User.IsInRole("Admin"))
+                    {
+
+                        <a asp-page="../Missions/Index" asp-route-churchId="@item.ChurchId">Missions</a><text> |</text>
+                        <a asp-page="./ChurchesMenu" asp-route-churchId="@item.ChurchId">Statistics</a> <text>&nbsp;&nbsp;&nbsp;&nbsp;</text>
+                        @if (User.IsInRole("ChurchAdmin") || User.IsInRole("Admin"))
+                        {
+                            <a asp-page="./Edit" asp-route-churchId="@item.ChurchId">Edit</a> <text>&nbsp;&nbsp;&nbsp;&nbsp;</text>
+                        }
+
+                        @if (User.IsInRole("Admin") || User.IsInRole("Admin"))
+                        {
+                            <a asp-page="./Delete" asp-route-churchId="@item.ChurchId">Delete</a> <text>&nbsp;&nbsp;&nbsp;&nbsp;</text>
+                        }
+                       
+
+                    }
+                    else
+                    {
+                        <div class="gray">Awaiting Approval</div>
+                    }
+
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-page="./ErrorTest">Test Error</a> <text>&nbsp;&nbsp;&nbsp;&nbsp;</text>
+
+                        <a asp-page="./Delete">Test 404</a>
+                    }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

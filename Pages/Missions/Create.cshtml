@@ -1,0 +1,183 @@
+﻿@page
+@model outreach3.Pages.Missions.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+<script>
+    //Global Variables
+    var mapData = { lat: 30.107625213389007, lng: -81.00915292022651 };
+    var mapZoom = 11;
+    var labelIndex = 1;
+    var map;
+    var mapMarkers = [];
+    var MyMapMarkers = new Array();
+    var markerCounter = 0;
+
+
+
+    /**
+     * Called from the Server
+     */
+    function SetMapData(mData, mZoom) {
+
+        mapData = mData;
+        mapZoom = mZoom;
+    }
+
+    /**
+     *
+    */
+    function SetMarkers(data) {
+        MyMapMarkers = data.toString().split("|");
+    }
+
+
+    /*******************Initialize the Map*********************/
+    function initMap() {
+        try {
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: mapZoom,
+                center: mapData,
+                mapTypeId: 'satellite'
+            });
+            /*******Create GeoCoder Objects******* */
+            var geocoder = new google.maps.Geocoder;
+            var infowindow = new google.maps.InfoWindow;
+
+
+
+            google.maps.event.addListener(map, 'click', function (event) {
+                geocodeLatLng(geocoder, map, infowindow, event.latLng);
+            });
+
+
+            if (MyMapMarkers.length > 0) {
+                if (markerCounter < MyMapMarkers.length) {
+                    var wa = window.setTimeout(function () { SetMarkersInMap(geocoder, map, MyMapMarkers[0]); }, 100);
+                }
+            } 
+        }
+        catch (e) {
+            alert(e.Message);
+        }
+    }
+
+
+
+    function SetMarkersInMap(geocoder, map, MyMapMarker) {
+        var m = MyMapMarker;
+        
+
+        var n = m.split("~")[0];
+        var o = m.split("~")[1];
+        var n = n.substring(n.indexOf("(") + 1, n.indexOf(")"));
+        var p = n.split(",");
+        var latlng = { lat: parseFloat(p[0]), lng: parseFloat(p[1]) };
+        geocoder.geocode({ 'location': latlng }, function (results, status) {
+            var marker = new google.maps.Marker({
+                position: latlng,
+                label: parseInt(mapMarkers.length + 1).toString(),
+                animation: google.maps.Animation.DROP,
+                map: map
+            });
+
+        });
+
+       
+        google.maps.event.addListener(marker, 'click', function () {
+
+            alert(marker.label);
+            ; if (marker.label.toString() == (mapMarkers.length).toString()) {
+                var removed = mapMarkers.splice(parseInt(marker.label) - 1, 1);
+                marker.setMap(null);
+                markerCounter--;
+            }
+        });
+        mapMarkers.push(marker);
+        markerCounter++;
+        //});
+
+        if (mapMarkers.length < MyMapMarkers.length) {
+            alert(mapMarkers.Length);
+            var w = window.setTimeout(function () { SetMarkersInMap(geocoder, map, infowindow, MyMapMarkers[markerCounter]) }, 50);
+        }
+
+    }
+
+
+
+
+    function geocodeLatLng(geocoder, map, infowindow, latlng) {
+
+        //var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
+        geocoder.geocode({ 'location': latlng }, function (results, status) {
+
+            if (status === 'OK') {
+                if (results[0]) {
+                    var marker = new google.maps.Marker({
+                        position: latlng,
+                        map: map
+                    });
+                    infowindow.setContent(results[0].formatted_address);
+                    infowindow.open(map, marker);
+                } else {
+                    window.alert('No results found');
+                }
+            } else {
+                window.alert('Geocoder failed due to: ' + status);
+            }
+        });
+    }
+
+    //function ShowMenu() {
+    //    $('#map').contextMenu(menu);
+    //}
+    function SaveMap() {
+        var mapData = "{lat:" + map.center.lat() + ", lng:" + map.center.lng() + "}";       
+        document.getElementById("inpMapZoom").value = map.getZoom();
+        document.getElementById("inpMapData").value = mapData;
+        document.getElementById("inpMapMarkerData").value = mapMarkerData.substring(0, mapMarkerData.length - 1);
+        document.getElementById("inpMapHeading").value = "0";
+        // document.getElementById("inpMapInfoData").value = mapInfoData.substring(0, mapInfoData.length - 1);
+
+    }
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuVWRgSV46wxc7yQlBo3p5pfiwxd7wA3w&callback=initMap" async defer></script>
+
+<h4>Mission</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+         <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+       
+        <div class="form-group">
+        <label asp-for="Mission.Name" class="control-label"></label>
+        <input asp-for="Mission.Name" name="inpMapName" class="form-control" />
+        <span asp-validation-for="Mission.Name" class="text-danger"></span>
+        </div> 
+
+        <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+        </form>
+    </div>
+</div>
+
+<div id="map" name="map" style="visibility:hidden;"></div>
+<div>
+    <a asp-page="Index" asp-route-churchId = "@Request.Query["churchId"]">Back to List</a>
+</div>
+
+
+
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

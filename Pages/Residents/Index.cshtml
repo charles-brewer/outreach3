@@ -1,0 +1,71 @@
+﻿@page
+@model outreach3.Pages.Residents.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h4> @Model.MissionName Residents</h4>
+
+<div style="text-align:right;"><a asp-page="../Missions/Index" asp-route-churchId=@Request.Query["churchId"] asp-route-missionId ="@Request.Query["missionId"]">Return to Missions List</a></div>
+
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                Number
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Residents[0].Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Residents[0].Apt)#
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Residents[0].FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Residents[0].LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Residents[0].HomePhone)
+            </th>
+            <th>
+               
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+     
+        @foreach (var item in Model.Residents.OrderBy(r=>r.BackColor).ThenBy(s=>s.number))
+        {
+            <tr>
+                <td>
+                    <div style="color:@item.ForeColor;text-align:center;width:32px;height:35px;background-image:url('../../images/@item.BackColor\.png'); background-repeat:no-repeat;background-position:left;background-size:100%;">
+                        @Html.DisplayFor(modelItem => item.OneToEight)
+                    </div>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HomePhone)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-churchId="@Model.ChurchId" asp-route-missionId="@item.MissionId" asp-route-residentId="@item.ResidentId">Edit Resident</a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>

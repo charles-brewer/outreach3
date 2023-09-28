@@ -1,0 +1,30 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<form method="post">
+<input class="shadow" type="submit" asp-page-handler="DownloadPDF" name="dlInput" onclick="download();" value="@Model.InputValue" />
+</form>
+<script>
+    function download()
+    {
+        document.getElementsByName("dlInput")[0].value="Downloading..."
+    }
+
+</script>
+
+<div class="text-center shadow">
+    <h4 class="display-4">Welcome</h4>
+
+    @{
+        string imagePath = Url.Content("~/images/Jesus.png");
+    }
+
+    
+
+    <img style="width:400px;align-self:center;" src="@imagePath" />
+
+    <div>Blessings from Westside Family Worship Center.  This Web Application is specifically designed for outreach ministries for any church that believes that Jesus is God manifested in the flesh.  
+        Please send inquiries to <a href="mailto:cgbrewer2@comcast.net?subject=Outreach Ministries&body=Request for Outreach Web Site Access.;">WFWC</a> to set up a church or begin by registering with the link at the top of this page..</div>
+</div>

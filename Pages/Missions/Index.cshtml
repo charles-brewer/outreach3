@@ -1,0 +1,85 @@
+﻿@page
+@model outreach3.Pages.Missions.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h4>@Model.GetChurchName() <text>Missions</text></h4>
+
+<table style="width:100%;">
+    <tr>
+
+
+        <td style="text-align:left;">   
+            <a asp-page="Create" asp-route-churchId=@Model.HttpContext.Request.Query["churchId"]>Create New</a>
+        </td>
+        <td style="text-align:right;">
+            <a asp-page="../Churches/Index">Return to Church List</a>
+        </td>
+    </tr>
+</table>
+
+
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Missions[0].Name)
+            </th>
+
+
+            <th>
+                @Html.DisplayNameFor(model => model.Missions[0].Status)
+            </th>
+            <th>
+                Assigned To
+            </th>
+
+            <th>
+                Date Assigned
+            </th>
+            <th>
+                Last Completed
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Missions)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+               
+                <td>
+                    @Html.DisplayFor(modelItem => item.AssignedTo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateAssigned)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateLastCompleted)
+                </td>
+
+                <td>
+                    <a asp-page="./Edit" asp-route-churchId="@item.ChurchId" asp-route-missionId="@item.MissionId">Edit Mission Map</a> |
+                    <a asp-page="../Residents/Index" asp-route-churchId="@item.ChurchId" asp-route-missionId="@item.MissionId">Residents</a> |
+                    <a asp-page="./Assignments" asp-route-churchId="@item.ChurchId" asp-route-missionId="@item.MissionId">Assignments</a> |
+                    @if(User.IsInRole("ChurchAdmin") || User.IsInRole("Admin"))
+                    {
+                    <a asp-page="./Delete" asp-route-churchId="@item.ChurchId" asp-route-missionId="@item.MissionId">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,82 @@
+﻿@page
+@model             ChurchRegistration
+
+@{
+    ViewData["Title"] = "Church Registration";
+}
+
+
+
+
+<h5>Please select the church(s) you are affiliated with.  The Church administrator will need to approve the request prior to access.
+    <p>If your church is not listed, please contact the <a href="mailto:cgbrewer2@comcast.net">site administrator</a> for a church administrator account.</p>
+</h5>
+<form method="post">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Churches[0].Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Churches[0].ChurchAddress)
+                </th>
+
+                <th>
+                   Select Church
+                </th>
+               
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Churches)
+            {
+                <tr>                
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => @item.ChurchFullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ChurchAddress)
+                    </td>
+                    <td>
+                        <input onchange="JoinChurch('@item.ChurchId');" type="radio" name="checkBoxChurchMember" value="@item.ChurchId" required />
+                    </td>  
+                </tr>
+            }
+
+
+
+
+        </tbody>
+    </table>
+    <input type="submit" name="inpJoin" asp-page-handler="JoinMemberToChurch" asp-route-memberId="@Model.MemberId">
+    <input type="hidden" name="JoinIds" />
+</form>
+<hr />
+<label class="shadow">Request to <a asp-page="../Churches/Create" asp-route-memberId="@Model.MemberId">Create</a> a new Church as the Church Administrator</label>
+
+
+<script>
+   
+    function JoinChurch(id) {
+
+        var joinIds = "";
+        for (var i = 0; i < document.getElementsByName("checkBoxChurchMember").length; i++) {
+
+            if (document.getElementsByName("checkBoxChurchMember")[i].checked.toString() == "true") {
+                var newValue = document.getElementsByName("checkBoxChurchMember")[i].value;
+                var joinIds = newValue;
+
+            }
+        }
+        document.getElementsByName("JoinIds")[0].value = joinIds;
+
+    }
+</script>

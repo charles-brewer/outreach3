@@ -1,0 +1,52 @@
+﻿@page
+@model outreach3.Pages.Members.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h4>Approve Membership</h4>
+<div class="rightDiv shadow">
+    <a asp-page="../Admin/AdminMenu">Return to Menu</a>
+</div>
+<form method="post">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Members[0].Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Members[0].Email)
+                </th>
+                <th>Approved</th>                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Members)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        <input asp-for="@item.Approved" type="checkbox" name="checkBoxChurchMember" value="@item.MemberId" />
+                    </td>
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class=" rightDiv">
+        <input class="shadow" type="submit" value="Save" asp-page-handler="Approve" />
+    </div>
+</form>
+<script>
+
+   
+
+</script>

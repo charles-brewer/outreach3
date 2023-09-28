@@ -1,0 +1,126 @@
+﻿@page
+@using outreach3.Data.Ministries;
+@model outreach3.Pages.Visitations.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h4>Visitation</h4>
+<div style="text-align:right">
+    <a asp-page="../Residents/Edit" asp-route-churchId="@Request.Query["churchId"]" asp-route-missionId="@Request.Query["missionId"]" asp-route-residentId="@Request.Query["residentId"]">Return to Resident Info</a>
+</div>
+
+<hr />
+<form method="post">
+    <table>
+        <tr>
+            <td style="vertical-align:top;border:1px solid Navy;">
+                <div class="row">
+                    <div class="col-md-4">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Visitation.VisitationId" />
+                        <div class="form-group">
+                            <label asp-for="Visitation.VisitationDate" class="control-label"></label>
+                            <input asp-for="Visitation.VisitationDate" type="date" class="form-control" style="width:400px;" />
+                            <span asp-validation-for="Visitation.VisitationDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Visitation.VisitationDetails" class="control-label"></label>
+                            @Html.TextAreaFor(m => m.Visitation.VisitationDetails, new { @class = "form-control multilinetext" })
+                            <span asp-validation-for="Visitation.VisitationDetails" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                </div>
+            </td>
+            <td style="vertical-align:top;border:1px solid Navy;">
+
+                <select name="churchMembers" size="7" style="width:100%" asp-items="Model.Options"><option selected="true" value="-1">[Select a Church Member]</option></select>
+                <br />
+                <input type="submit" formmethod="post" asp-page-handler="AddMember" value="Add" asp-route-churchId="@Request.Query["churchId"]" asp-route-missionId="@Request.Query["missionId"]" asp-route-residentId="@Request.Query["residentId"]" />
+                <br /><br /><br /><br /><br />
+                <div>Visitee(s)</div>
+                @foreach (var visitee in Model.MembersOfVisitation.ToList())
+                {
+                                        <span>@visitee.Member.Name</span>
+                    <input type="hidden" name="visiteeId" value="@visitee.MemberId" />
+                    <input type="submit" name="visiteeId" style="border:none;background-color:transparent; text-decoration:underline;"
+                           formmethod="post" asp-route-churchId="@Request.Query["churchId"]" asp-route-missionId="@Request.Query["missionId"]" asp-route-residentId="@Request.Query["residentId"]" asp-page-handler="RemoveVisitee" value="Remove" />
+
+                    <br />
+                }
+
+
+            </td>
+        </tr>
+        <tr style="border:1px solid navy;">
+            <td>
+                <table>
+                    <tr>
+                        <td>
+                            <div class="form-group form-check">
+                                <label class="form-check-label" asp-for="Visitation.VisitationType" class="control-label">
+                                    @Html.RadioButtonFor(x => x.Visitation.VisitationType, TypeVisit.DoorHanger) Left Door Hanger
+                                </label>
+                            </div>
+
+                            <div class="form-group form-check">
+                                <label class="form-check-label" asp-for="Visitation.VisitationType" class="control-label">
+                                    @Html.RadioButtonFor(x => x.Visitation.VisitationType, TypeVisit.Greeted) Greeted
+                                </label>
+                            </div>
+
+                            <div class="form-group form-check">
+                                <label class="form-check-label" asp-for="Visitation.VisitationType" class="control-label">
+                                    @Html.RadioButtonFor(x => x.Visitation.VisitationType, TypeVisit.None ) None
+                                </label>
+                            </div>
+
+                            <div class="form-group">
+                                <input onclick="validateType()" type="submit" value="Save" asp-page-handler="Save" asp-route-churchId="@Request.Query["churchId"]" asp-route-missionId="@Request.Query["missionId"]"
+                                       asp-route-residentId="@Request.Query["residentId"]" class="btn btn-primary" />
+                            </div>
+                        </td>
+                        <td class="tdAlignRightAndSmall">
+                            <label>Select a Follow Up Date</label>
+                                <input asp-for="Visitation.FollowUp" type="date" name="followupDate" style="width:250px;" />
+                                <span asp-validation-for="Visitation.FollowUp" class="text-danger"></span>
+                            
+                        </td>
+                       
+                    </tr>
+                </table>
+            </td>
+            <td>
+               
+            </td>
+        </tr>
+    </table>
+</form>
+
+<style>
+    .multilinetext {
+        width: 600px;
+        height: 300px;
+    }
+</style>
+
+<script>
+
+    function validateType() {
+
+        var result = $('[name="Visitation.VisitationType"]:checked').val();
+        if (result == "None") {
+            confirm("Please select 'Greeted' or 'Left Door Hanger' to Save the Visitation.");
+            return false;
+        }
+    }
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

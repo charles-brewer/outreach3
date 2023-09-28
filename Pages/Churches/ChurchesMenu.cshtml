@@ -1,0 +1,36 @@
+﻿@page
+@model outreach3.Pages.Churches.ChurchesMenuModel
+@{
+
+    <h4> Church Status Menu</h4>
+    <div style="text-align:right;"><a asp-page="../Churches/Index" asp-route-churchId="@Request.Query["churchId"]">Return to Churches List</a></div>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <td>
+                    <a asp-page="/Churches/ChurchMap" asp-route-churchId="@Request.Query["ChurchId"]">Church Missions Map</a>
+                </td>
+
+                <td>
+                    <a asp-page="/Churches/Stats" asp-route-churchId="@Request.Query["ChurchId"]">Mission Statistics</a>
+                </td>
+
+
+                <td>
+                    <a asp-page="../ChurchGoals/Details" asp-route-churchId="@Request.Query["ChurchId"]">Church Goals</a>
+                </td>
+
+            </tr>
+
+        </tbody>
+    </table>
+}

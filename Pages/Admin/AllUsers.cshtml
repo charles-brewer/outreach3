@@ -1,0 +1,50 @@
+﻿@page
+@model outreach3.Pages.Admin.AllUsersModel
+@inject IServiceProvider Service;
+@{
+    ViewData["Title"] = "Users";
+}
+
+<h4>Users</h4>
+<div class="rightDiv">
+    <a asp-page="./AdminMenu">Return to Menu</a>
+</div>
+<hr />
+
+   
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+           
+            @foreach (var church in Model.Churches)
+            {
+                
+                <table class="table7">
+                    <thead>
+                        <tr><td colspan="4"><div class="selectChurchHeader2">@church.ChurchFullName</div></td></tr>
+                        <tr>
+                            <td class="td7">User Name</td>
+                            <td class="td7">E-Mail></td>
+                            <td class="td7">Edit</td>
+                        </tr>
+                    </thead>
+                    @foreach (var member in Model.Members.Where(m => m.ChurchId == church.ChurchId))
+                    {
+                        <tr>
+                            <td>@member.Name</td>
+                            <td>@member.Email</td>
+                            <td><a asp-page="../Members/Edit" asp-route-churchId="@member.ChurchId" asp-route-memberId="@member.MemberId">Edit</a></td>
+                        </tr>
+
+                    }
+                </table>
+                <br/><br/>
+            }
+        </form>
+
+
+
+        @section Scripts {
+            @{
+                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+            }
+        }

@@ -1,0 +1,359 @@
+﻿@page
+@model outreach3.Pages.Missions.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h4>@Model.Mission.Name Mission Map </h4>
+
+
+<script>
+    //Global Variables
+    var mapData = { lat: 30.107625213389007, lng: -81.00915292022651 };
+    var mapZoom = 11;
+    var map;  
+    var mapMarkers = new Array();
+    var geocoder;
+    var infoWindow;
+
+
+
+    var markerCounter = 1;
+    var selectedMarker;
+     var mapMarkerData="";
+     var movedMapMarkers="";
+    /*****************************Initialize the Map************************************/
+    async function initMap() 
+    {
+
+         /*******Create GeoCoder Objects******* */
+        geocoder = new google.maps.Geocoder;
+        infoWindow= new google.maps.InfoWindow();
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: @Model.Map.MapZoom,
+            mapTypeId: 'hybrid'
+        });
+
+        document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+        var centerData = @Model.Map.MapData;
+        var mapCenter = JSON.stringify(centerData);
+        var mapCenterObj = JSON.parse(mapCenter);
+        var myLat = mapCenterObj.lat;
+        var myLong = mapCenterObj.lng;
+        
+        map.setCenter(new google.maps.LatLng(myLat, myLong));
+
+        
+        /******Insert Markers from database******/
+        @foreach (var marker in Model.Mission.MissionMap.MapMarkers.Where(m=>m.MissionMapId==Model.Mission.MissionMapId).ToList().OrderBy(m=>m.Number))
+        {       
+            <text>var slatlng = "@marker.LatLng"; </text>       
+            <text>var address = "@marker.Title"; </text>
+            <text>var markerNumber = @marker.Number.ToString(); </text>
+            <text>SetMarkersInMapOnLoad(slatlng); </text>        
+        }
+
+        /***************Set Map Properties *******************/
+        map.setTilt(parseInt(document.getElementById("inpMapTilt").value));
+        map.setHeading(parseInt(document.getElementById("inpMapHeading").value));
+
+        /*****************Add Click Event******************************/
+        google.maps.event.addListener(map, 'click', function (event) {
+            addMarker(event.latLng, false);
+        });
+        /*****************Add Center Changed Event******************************/
+        google.maps.event.addListener(map, 'center_changed', function () {
+            UpdateCoordinates(map.getCenter());
+        });
+        /*****************Add zoom Event******************************/
+        google.maps.event.addListener(map, 'zoom_changed', function () {
+            UpdateZoom(map.getZoom());
+        })
+    }
+    /******************************************************************************* */
+   
+
+    function SetMarkersInMapOnLoad(latlng) 
+    {       
+      var latlngParts = latlng.replace("(", "").replace(")", "").split(",");        
+      var slatlng = JSON.parse("{\"lat\": " + latlngParts[0].toString() + ", \"lng\": " + latlngParts[1].toString() + "}"); 
+      addMarker(slatlng, true);
+     
+    }
+
+    
+     function  addMarker(location, canDelete) 
+     {    
+         var number = mapMarkers.length + 1;
+
+         if(number>48)
+         {
+             alert("Markers are limited to 48 per mission.  Please create a second mission if needed.");
+             return;
+         }
+         
+         /*  1:  Set Color and Label  */
+         setColors(number);
+         
+         var oneToEight = number;
+         while(oneToEight > 8)
+         {
+             oneToEight-=8;
+         }
+
+         var iconText= "../../Images/" + markColor + ".png"
+         if("@Model.IsDevlopement"=="False")
+         {
+             iconText= "https://wfwcoutreach.com/wwwroot/Images/" + markColor + ".png"
+         }
+         
+        /* 2:  Create Marker  */
+         var marker = new google.maps.Marker({
+            position: location,                       
+            icon: iconText, 
+            forecolor: foreColor,
+            draggable: true,
+            label: oneToEight.toString(),   
+            tag: number,
+            map: map
+        });
+ 
+        //  3: Geocode the infowindow        
+        geocodeLatLng(location, marker);
+
+        //  4:  Add Marker Event handlers
+        //Drag
+        google.maps.event.addListener(marker, 'drag', function (event) {
+            selectedMarker = marker;
+
+        });
+        //DragEnd
+        google.maps.event.addListener(marker, 'dragend', function (event) {
+             marker.position = event.latLng;
+             
+             geocodeLatLng(event.latLng, marker )
+        });
+
+        if(canDelete)
+        {
+        //Context Menu
+         google.maps.event.addListener(marker, 'contextmenu', function (e) {
+                 for (prop in e) {
+                 if (e[prop] instanceof MouseEvent) {
+                  mouseEvt = e[prop];
+                  var left = mouseEvt.clientX;
+                  var top = mouseEvt.clientY-10;
+                  
+                  menuBox = document.getElementById("menu");
+                  menuBox.style.visibility="visible";
+                  menuBox.style.left = left + "px";
+                  menuBox.style.top = top + "px";
+                  menuBox.style.width="50px";
+                  menuBox.style.height="16px";
+                  menuBox.style.display = "block";
+                  menuBox.style.zIndex="900";
+                  menuBox.style.position = "absolute";
+                  menuBox.style.color="yellow";
+                  menuBox.style.border="1px gray outset";
+                  menuBox.style.backgroundColor="red"
+                  menuBox.style.fontWeight="normal";
+                  menuBox.style.cursor = "pointer";
+                  menuBox.addEventListener('click', function(ev){removeCursor(marker.tag);});
+                  mouseEvt.preventDefault();
+                  menuDisplayed = true;                  
+                  
+                }
+              }
+          });
+        }
+          //  5: Add the Marker to the collection
+         mapMarkers.push(marker);
+    }
+
+     function geocodeLatLng(latlng, marker) 
+    {        
+        geocoder
+            .geocode({ location: latlng })
+            .then((response) => {
+                if (response.results[0]) {
+                    infoWindow.setContent(response.results[0].formatted_address);
+                    marker.setTitle(response.results[0].formatted_address);
+
+                } else {
+                    window.alert("No results found");
+                }
+            })
+            .catch((e) => window.alert("Geocoder failed due to: " + e));
+    }
+    
+    var markColor = "blue";
+    var foreColor = "white";
+    
+    function setColors(num)
+    {
+          if(num > 0 && num < 9)
+            {
+                markColor= "blue";
+                foreColor= "white";
+            }
+            if (num > 8 && num < 17)
+            {
+                markColor= "brown";
+                foreColor= "white";
+            }
+            if (num > 16 && num < 25)
+            {
+                markColor= "green";
+                foreColor= "white";
+            }
+            if (num > 24 && num < 33)
+            {
+                markColor= "red";
+                foreColor= "white";
+            }
+            if (num > 32 && num < 41)
+            {
+                markColor= "white";
+                foreColor= "navy";
+            }
+            if (num > 40)
+            {
+                markColor= "yellow";
+                foreColor= "navy";
+            }
+            
+         
+    }
+
+    function removeCursor(number)
+    {        
+        document.getElementById("inpMapMarkerToDelete").value = number;
+        menuBox = document.getElementById("menu").style.display="none";  
+    }
+
+   
+     
+
+      
+    function UpdateAllMarkerCoordinates() 
+    {
+
+       mapMarkerData="";
+       try
+       { 
+           for (var x = 0; x < mapMarkers.length; x++) 
+            {       
+                mapMarkerData +=  mapMarkers[x].tag +";" + mapMarkers[x].position+";" + mapMarkers[x].getTitle()+ ";" + mapMarkers[x].label + "|";
+            }
+       }
+       catch(e)
+       {
+           alert("Message: " + e.message);
+       }
+
+
+       //for (var x = 0; x < allMarkers.length; x++) 
+       //     {       
+       //         allMarkerData +=  allMarkers[x].tag +";" + allMarkers[x].position+";" + allMarkers[x].getTitle()+ ";" + allMarkers[x].label + "|";
+       //     }
+
+
+       // allMarkerData=allMarkerData.substr(0,allMarkerData.length-1);
+        
+       // document.getElementById("inpMovedMapMarkerData").value = movedMapMarkers;       
+        
+        
+
+    }
+
+    function UpdateZoom(c) {
+        inpMapZoom.value = c;
+    }
+
+    function SaveMap() {
+        var mapData = "{lat:" + map.center.lat() + ", lng:" + map.center.lng() + "}";
+               
+        UpdateAllMarkerCoordinates();
+        
+
+        document.getElementById("inpMapZoom").value = map.getZoom();
+        document.getElementById("inpMapData").value = mapData;
+        document.getElementById("inpMapMarkerData").value = mapMarkerData;
+        document.getElementById("inpMapHeading").value = "0";    
+         document.getElementById("inpAllMarkerData").value = allMarkerData;
+    }
+
+</script>
+
+<form method="post">
+    <div style="display:none;" id="menu">
+       <input asp-page-handler="DeleteMarker"  onclick="removeCursor(selectedMarker);" asp-route-missionId="@Model.Mission.MissionId" formmethod="post" type="submit" value="Delete" class="btn btn-dark" />
+    </div>
+    
+    <div style="text-align:right;"><a asp-page="./Index"  asp-route-missionId="@Model.Mission.MissionId" asp-route-churchId=@Request.Query["churchId"] asp-route-churchName=@Request.Query["churchName"]>Return to Missions List</a></div>
+    <input asp-page-handler="Save" asp-route-missionId="@Model.Mission.MissionId" asp-route-churchId="@Model.Mission.ChurchId" onclick="SaveMap();" formmethod="post" type="submit" value="Save" class="btn btn-dark" />
+    <hr />
+     <div id="map" name="map" style="font-size:1px;border: 2px;width:640px;height:640px; background-color:blue"></div>     
+    <table>
+       
+        <tr>
+            <td>
+                         
+            </td>
+            <td style="visibility:hidden;">
+                <div class="form-group">
+                    <label asp-for="@Model.Map.MapData" class="control-label"></label>
+                    <input asp-for="@Model.Map.MapData" id="inpMapData" name="inpMapData" class="form-control" />
+                    <span asp-validation-for="@Model.Map.MapData" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Map.MapZoom" class="control-label"></label>
+                    <input asp-for="@Model.Map.MapZoom" id="inpMapZoom" name="inpMapZoom" class="form-control" />
+                    <span asp-validation-for="@Model.Map.MapZoom" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Map.MapTilt" class="control-label"></label>
+                    <input asp-for="@Model.Map.MapTilt" id="inpMapTilt" name="inpMapTilt" class="form-control" />
+                    <span asp-validation-for="@Model.Map.MapTilt" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Map.MapHeading" class="control-label"></label>
+                    <input asp-for="@Model.Map.MapHeading" id="inpMapHeading" name="inpMapHeading" class="form-control" />
+                    <span asp-validation-for="@Model.Map.MapHeading" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Mission.Name" class="control-label"></label>
+                    <input asp-for="@Model.Mission.Name" id="inpMapName" name="inpMapName" class="form-control" />
+                    <span asp-validation-for="@Model.Mission.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Mission.Status" class="control-label"></label>
+                    <input asp-for="@Model.Mission.Status" id="inpMapStatus" name="inpMapStatus" class="form-control" />
+                    <span asp-validation-for="@Model.Mission.Status" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="@Model.Mission.MissionMap.MapMarkers" class="control-label"></label>
+                    <input asp-for="@Model.Mission.MissionMap.MapMarkers" id="inpMapMarkers" name="inpMapMarkers" class="form-control" />
+                    <span asp-validation-for="@Model.Mission.MissionMap.MapMarkers" class="text-danger"></span>
+                </div>
+                 <input type="text" name="inpMovedMapMarkerData" id="inpMovedMapMarkerData" style="border-color:red;width:800px;height:100px;word-wrap:normal;" />
+                <input type="text" name="inpMapMarkerData" id="inpMapMarkerData" style="border-color:red;width:800px;height:100px;word-wrap:normal;" />
+                <input type="text" name="inpAllMarkerData" id="inpAllMarkerData" style="border-color:red;width:800px;height:100px;word-wrap:normal;" />
+                <input type="text" name="inpMapMarkerToDelete" id="inpMapMarkerToDelete" style="border-color:red;width:800px;height:100px;word-wrap:normal;" />
+                <input type="hidden" asp-page-handler="DeleteMarker"  name="inpMapMarkerToDelete" id="inpMapMarkerToDelete" style="border-color:green;width:800px;height:100px;word-wrap:normal;" />
+                <div id="letter" name="letter" style="width:400px;height:100px;border:2px green solid;"></div>
+            </td>
+        </tr>
+    </table>
+</form>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuVWRgSV46wxc7yQlBo3p5pfiwxd7wA3w&callback=initMap" async defer></script>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

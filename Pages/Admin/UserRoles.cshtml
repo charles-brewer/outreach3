@@ -1,0 +1,122 @@
+﻿@page
+@model outreach3.Pages.Admin.UserRolesModel
+@inject IServiceProvider Service;
+@{
+    ViewData["Title"] = "UserRoles";
+}
+
+<h4>UserRoles</h4>
+<div class="rightDiv">
+    <a asp-page="./AdminMenu">Return to Menu</a>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+           
+            <table>
+                <tr style="vertical-align:top;">     
+                    <td>
+                        
+                              
+                        <div class="selectChurch">
+                            <div class="selectChurchHeader"> Select a Church</div>
+                            <hr />
+                            @foreach (var church in Model.Churches)
+                            {
+
+                                @if (Request.Query["churchId"] == @church.ChurchId.ToString())
+                                {
+                                    <p>
+                                        <input class="shadowGreen" type="submit" asp-route-churchId="@church.ChurchId" asp-page-handler="SelectedChurch" value="@church.Name" />
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p>
+                                        <input class="shadow" type="submit" asp-route-churchId="@church.ChurchId" asp-page-handler="SelectedChurch" value="@church.Name" />
+                                    </p>
+                                }
+
+                               
+                            }                            
+                        </div>
+
+                                
+                    </td>
+
+                    <td>                        
+                       <div class="selectChurch">    
+                            <div class="selectChurchHeader"> Select a Member</div><hr />
+                           
+                                @foreach(var member in Model.Members)
+                                {
+                                    
+                                var selectedLink = "shadow";
+                                @if(Request.Query["memberId"]==member.MemberId.ToString())
+                                {
+                                    selectedLink = "shadowGreen";
+                                }
+                                            <input class="@selectedLink" type="submit" asp-route-churchId="@Model.SelectedChurchId" asp-route-memberId="@member.MemberId" asp-page-handler="SelectedMember" value="@member.Name"  />
+                                           
+
+                                    <br/>
+                                }
+                          
+                        </div>         
+                    </td>
+                    
+                    <td>
+                          <div class="selectChurchLeft">    
+                            <div class="selectChurchHeader">Select a Role</div><hr />                            
+                                @foreach(var role in Model.AllRoles)
+                                {
+                                    <span class="linkInput">@role.ToString()
+                                            <input asp-route-churchId="@Model.SelectedChurchId" asp-route-memberId="@Model.SelectedMemberId" asp-route-role="@role" class="linkInputDark" type="submit" asp-page-handler="AddRole" value="Add"></span> <br/>
+                                }                            
+                        </div>     
+                    </td>
+                     <td>
+                          <div class="selectChurchLeft">    
+                            <div class="selectChurchHeader">User Roles</div><hr />
+                                @foreach (var role in Model.UserRoles)
+                                {
+                                            <span class="linkInput">@role.ToString()
+                                        <input asp-route-churchId="@Model.SelectedChurchId" asp-route-memberId="@Model.SelectedMemberId" asp-route-role="@role" class="linkInputDark" type="submit" asp-page-handler="RemoveRole" value="Remove">
+                                    </span> <br />
+
+                                }
+                        </div>     
+                    </td>
+                </tr>
+            </table>   
+             <input type="hidden" name=selectedChurch />
+             <input type="hidden" name="inpRemoveRoleUser" />
+             <input type="hidden" name="inpRemoveRoleRole" />
+              <input type="hidden" name="inpAddRoleUser" />
+             <input type="hidden" name="inpAddRoleRole" />
+        
+         </form>
+    </div>
+</div>
+
+<script>
+ 
+    function removeRoleFromUser(u, r)
+    {        
+        document.getElementsByName("inpRemoveRoleUser")[0].value = u;
+        document.getElementsByName("inpRemoveRoleRole")[0].value = r;
+    }
+    
+    function addRoleToUser(u, r)
+    {   
+        document.getElementsByName("inpAddRoleUser")[0].value = u;
+        document.getElementsByName("inpAddRoleRole")[0].value = r;
+    }
+
+
+</script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

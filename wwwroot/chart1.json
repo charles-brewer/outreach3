@@ -1,0 +1,44 @@
+{
+    "type": "bar",
+
+    "data": {
+      "labels": [ "Knock Goal", "Knocks", "Greeting Goal", "Greets", "Goal Length", "Days Left" ],
+      "datasets": [
+        {
+          "label": "Visitations",
+          "data": " + JsonConvert.SerializeObject(theData)+ @",
+          "backgroundColor": [
+            "steelblue",
+            "lightsteelblue",
+            "#6CA881",
+            "#39744E",
+            "brown",
+            "tan"
+          ],
+          "borderColor": [
+            "navy",
+            "navy",
+            "gold",
+            "gold",
+            "#dddddd",
+            "#dddddd"
+          ],
+          "borderWidth": 1
+        }
+      ]
+    },
+    "options": {
+      "responsive": true,
+
+      "maintainAspectRatio": false,
+      "scales": {
+        "yAxes": [
+          {
+            "ticks": {
+              "beginAtZero": true
+            }
+          }
+        ]
+      }
+    }
+  }

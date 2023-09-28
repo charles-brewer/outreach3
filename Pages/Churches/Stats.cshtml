@@ -1,0 +1,103 @@
+﻿@page
+@using outreach3.Data.Ministries;
+@model outreach3.Pages.Churches.StatsModel
+@{
+    <h4> Mission Statistics</h4> 
+    
+    <div style="text-align:right;"><a asp-page="../Churches/ChurchesMenu" asp-route-churchId="@Request.Query["churchId"]">Return to Status Menu</a></div>
+    <hr />
+   
+    <div class="centerDiv">
+    <table class="wfwcStatusCardsTable">
+        <tr class="wfwcStatusCardsRow">
+            <td>
+                <div class="wfwcStatusCards">
+                    <table class="wfwcStatusCardsTable">
+                        <thead>
+                            <tr>
+                                <td colspan="3" class="wfwcStatusCardsHeader"> Missions</td>
+                            </tr>
+                        </thead>
+
+                        <tr>
+                            <td class="wfwcStatusCardsColumnHeader">Name</td>
+                            <td class="wfwcStatusCardsColumnHeader">Status</td>
+                            <td class="wfwcStatusCardsColumnHeader">Resident Count</td>
+                        </tr>
+
+                        @foreach (var mission in Model.Missions)
+                        {
+                            <tr>
+                                <td class="wfwcStatusCardsColumn">@mission.Name</td>
+                                <td class="wfwcStatusCardsColumn">@mission.Status</td>
+                                <td class="wfwcStatusCardsColumn">@Model.Residents.Where(r=>r.MissionId==mission.MissionId).Count()</td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+            </td>
+
+
+            <td>
+                <div class="wfwcStatusCards">
+                    <table class="wfwcStatusCardsTable">
+                        <thead>
+                            <tr>
+                                <td colspan="2" class="wfwcStatusCardsHeader">Visitations</td>
+                            </tr>
+                        </thead>
+
+                        <tr>
+                            <td class="wfwcStatusCardsColumnHeader">Greeted</td>
+                            <td class="wfwcStatusCardsColumnHeader">Left Door Hanger</td>
+                        </tr>
+
+                        <tr>
+                            <td class="wfwcStatusCardsColumn">@Model.Visitations.Where(v=>v.VisitationType==TypeVisit.Greeted).Count()</td>
+                                <td class="wfwcStatusCardsColumn">@Model.Visitations.Where(v=>v.VisitationType==TypeVisit.DoorHanger).Count()</td>
+                        </tr>
+
+
+                    </table>
+                </div>
+            </td>
+
+
+            <td>
+                <div class="wfwcStatusCards">
+                    <table class="wfwcStatusCardsTable">
+                        <thead>
+                            <tr>
+                                <td colspan="2" class="wfwcStatusCardsHeader">Members</td>
+                            </tr>
+                        </thead>
+
+                        <tr>
+                            <td class="wfwcStatusCardsColumnHeader">Name</td>
+                            <td class="wfwcStatusCardsColumnHeader">Visitations</td>
+                        </tr>
+                        @foreach(var member in Model.Members.Distinct())
+                        {
+                        <tr>
+                                <td class="wfwcStatusCardsColumnHeader">@member.Name</td>
+                                <td class="wfwcStatusCardsColumnHeader">@Model.VisitationMembers.Count(m=>m.MemberId==member.MemberId);</td>
+                        </tr>
+                        }
+
+
+                    </table>
+                </div>
+            </td>
+
+
+          
+        </tr>
+    </table>
+    </div>
+
+
+
+
+
+}

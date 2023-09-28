@@ -1,0 +1,96 @@
+﻿@page
+@model outreach3.Pages.Residents.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<hr />
+
+<div style=" text-align:right;">
+    <a asp-page="./Index"  asp-route-churchId="@Request.Query["churchId"]" asp-route-missionId="@Model.SelectedResident.MissionId">Return to Residents List</a>
+</div>
+
+<div class="row">
+    <div>
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="SelectedResident.ResidentId" />
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width:50%;">Resident Information</th>
+                        <th>Visitations</th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td>
+                        <div class="visually-hidden">
+                            <label asp-for="SelectedResident.number" class="control-label"></label>
+                            <input asp-for="SelectedResident.number" readonly="true" class="form-control" />
+                            <span asp-validation-for="SelectedResident.number" class="text-danger"></span>
+                        </div>                      
+
+                        <div class="form-group">
+                            <label asp-for="SelectedResident.Address" class="control-label"></label>
+                            <input readonly asp-for="SelectedResident.Address" class="form-control" />
+                            <span asp-validation-for="SelectedResident.Address" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="SelectedResident.Apt" class="control-label"></label>
+                            <input asp-for="SelectedResident.Apt" class="form-control" />
+                            <span asp-validation-for="SelectedResident.Apt" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="SelectedResident.FirstName" class="control-label"></label>
+                            <input asp-for="SelectedResident.FirstName" class="form-control" />
+                            <span asp-validation-for="SelectedResident.FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="SelectedResident.LastName" class="control-label"></label>
+                            <input asp-for="SelectedResident.LastName" class="form-control" />
+                            <span asp-validation-for="SelectedResident.LastName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="SelectedResident.HomePhone" class="control-label"></label>
+                            <input asp-for="SelectedResident.HomePhone" class="form-control" />
+                            <span asp-validation-for="SelectedResident.HomePhone" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" value="Save" class="btn btn-primary" asp-page-handler="Save" asp-route-churchId="@Request.Query["churchId"]" asp-route-missionId="@Model.SelectedResident.MissionId" asp-route-residentId="@Model.SelectedResident.ResidentId" />
+                        </div>
+                    </td>
+                    
+                    <td vertical-align:top;">
+                        <input type="submit" style="border:none;text-decoration:underline; color:darkblue;" value="Create New Visitation" asp-page-handler="CreateVisitation" asp-route-churchId="@Request.Query["churchId"]" asp-route-missionId="@Request.Query["missionId"]" asp-route-residentId="@Model.SelectedResident.ResidentId" />
+                        <br /> 
+                        @foreach (var visitation in Model.SelectedResident.Visitations)
+                            {
+                            <div>
+                               Visitation on  <input asp-for="@Model.VisitationDetails" type="submit" style="border:none;text-decoration:underline; color:blue" value="@visitation.VisitationDate.ToShortDateString()" asp-page-handler="ShowVisitation" asp-route-churchId="@Request.Query["ChurchId"]" asp-route-missionId="@Model.SelectedResident.MissionId" asp-route-residentId="@Model.SelectedResident.ResidentId" asp-route-visitationId=@visitation.VisitationId />
+
+                               @* <input type="submit" value="Remove" asp-page-handler="RemoveVisitation" asp-route-visitationId="@visitation.VisitationId" />*@
+                            </div>
+                            }
+
+
+                    </td>
+                </tr>
+            </table>          
+
+
+
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

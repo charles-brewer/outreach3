@@ -1,0 +1,78 @@
+﻿@page
+@model outreach3.Pages.Missions.AssignmentsModel
+
+@{
+    ViewData["Title"] = "Assignments";
+}
+
+
+
+<h4>Mission Assignments</h4>
+<div style="text-align:right;"><a asp-page="./Index" asp-route-churchId="@Request.Query["churchId"]" asp-route-missionId="@Request.Query["missionId"]">Return to Missions List</a></div>
+<hr />
+
+<table class="table">
+    <tr><td>
+            <form method="post">
+
+                <a href="@Url.Page("Assignments", "DownloadFile", new { churchId=Request.Query["churchId"], missionId=Request.Query["missionId"] })">Print Mission to PDF</a>
+
+            </form>
+    </td><td></td></tr>
+    <tr>
+        <td class="col-md-8">
+            <div class="row">
+                <div class="col-md-8">
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Mission.MissionId" />
+                        <div class="form-group">
+                            <label asp-for="Mission.Name" class="control-label"></label>
+                            <input asp-for="Mission.Name" class="form-control" />
+                            <span asp-validation-for="Mission.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Mission.Status" class="control-label"></label>
+                            <select asp-for="Mission.Status" name="status" asp-items="Model.Statuses" disabled="@Model.IsDisabled()" class="form-control"></select>
+                            <span asp-validation-for="Mission.Status" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Mission.AssignedTo" class="control-label"></label>
+                            <select asp-for="Mission.AssignedTo" asp-items="Model.Options" name="assignedTo" disabled="@Model.IsDisabled()" class="form-control">
+
+                                <option value="0">[Select a Church Member]</option>
+
+                            </select>
+                            <span asp-validation-for="Mission.AssignedTo" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Date Assigned</label>
+                            <input asp-for="Mission.DateAssigned" disabled="@Model.IsDisabled()" class="form-control" name="dateAssigned" />
+                            <span asp-validation-for="Mission.DateAssigned" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Date Completed</label>
+                            <input asp-for="Mission.DateLastCompleted" disabled="@Model.IsDisabled()" class="form-control" />
+                            <span asp-validation-for="Mission.DateLastCompleted" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" asp-page-handler="Save" value="Save" asp-route-churchId="@Request.Query["churchId"]" asp-route-missionId="@Request.Query["missionId"]" class="btn btn-primary" />
+                            <input type="submit" asp-page-handler="Reset" value="Reset" asp-route-churchId="@Request.Query["churchId"]" asp-route-missionId="@Request.Query["missionId"]" class="btn btn-primary" />                           
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </td>
+        <td>
+          
+
+        </td>
+    </tr>
+</table>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
