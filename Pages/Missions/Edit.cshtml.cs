@@ -264,7 +264,7 @@ namespace outreach3.Pages.Missions
             {
                 Microsoft.AspNetCore.Hosting.IWebHostEnvironment _hostingEnvironment = this.webHostEnvironment;
 
-                var path = Server.MapPath("maps/" + missionMap.MapName.Replace(" ","") + ".png");
+                var path = Server.MapPath("maps/map_" + missionMap.MissionMapId + ".png");
 
                 using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
