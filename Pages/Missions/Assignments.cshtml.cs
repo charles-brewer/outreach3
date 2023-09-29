@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -153,10 +153,11 @@ namespace outreach3.Pages.Missions
             htmlPage += "<title></title>";
             htmlPage += " <style>";
             htmlPage += "table,tr,th,td{border-collapse: collapse;border:1px solid navy;text-align:center;font-size:10pt; !important}";
-            htmlPage += " .tdNumber{width:10%;}";
+            htmlPage += " .tdNumber{width:7%;}";
             htmlPage += " .tdName{width:30%;}";
-            htmlPage += " .tdAddress{ width:50%;}";
-            htmlPage += " .tdDoorHanger{ width:10%;}";
+            htmlPage += " .tdAddress{ width:40%;}";
+            htmlPage += " .tdDoorHanger{ width:8%;}";
+            htmlPage += " .followUp{ width:15%;}";
             htmlPage += "@page { size: portrait !important;}";
 
             htmlPage += "@media print {@page { margin: 40px;  !important;}body { margin: 1.6cm; !important; }}";
@@ -186,7 +187,7 @@ namespace outreach3.Pages.Missions
             htmlPage += "Date Last Completed: " + mission.DateLastCompleted.ToString().Replace("12:00:00 AM", "") + "<br/>";
             htmlPage += "<div>Outreacher_______________________________________   Date___________________________</div><br/>";
             /***********************Table of Residents**************************/
-            htmlPage += "<table style='width:98%;'><tr><td>Number</td><td>Name</td><td>Address</td><td>Door Hanger</td></tr>";
+            htmlPage += "<table style='width:98%;'><tr><td>Number</td><td>Name</td><td>Address</td><td>Door Hanger</td><td>Follow Up</td></tr>";
 
             var residents = _context.Residents.Where(r => r.MissionId == missionId).ToList();
             var map = await _context.MissionMaps.FirstOrDefaultAsync(m => m.MissionMapId == mission.MissionMapId);
@@ -205,6 +206,7 @@ namespace outreach3.Pages.Missions
                     htmlPage += "<td class='tdName'>" + res.FirstName + ", " + res.LastName + "</td>";
                 htmlPage += "<td class='tdAddress'>" + res.Address + "</td>";
                 htmlPage += "<td class='tdDoorhanger'><img src='/images/box.png' /></td>";
+                htmlPage += "<td class='followUp'>__________ <br/><span style='font-size:8pt;'>(Days/Weeks(Circle)</span></td>";
                 htmlPage += "</tr>";
             }
             htmlPage += "</table>";
@@ -283,12 +285,11 @@ namespace outreach3.Pages.Missions
             htmlPage += "<table style='width:98%;height:95%;'><tr><td style='text-align:center;height:95%;'>";
             if(_webHostEnvironment.IsDevelopment())
             {
-                htmlPage += "<img src='/maps/" + mission.Name.Replace(" ", "").Replace("'", "''") + "_map.png" + "' style='height:900px;' />";
-
+                htmlPage += "<img src='/maps/map_" + mission.MissionMapId + ".png" + "' style='height:900px;' />";
             }
             else 
             {
-                htmlPage += "<img src='https://www.wfwcoutreach.com/maps/" + mission.Name.Replace(" ", "").Replace("'", "''") + "_map.png" + "' style='height:900px;' />";
+                htmlPage += "<img src='https://www.wfwcoutreach.com/maps/map" + mission.MissionMapId + ".png" + "' style='height:900px;' />";
             }
             htmlPage += "</td></tr></table>";
             htmlPage += "<div style='page-break-after:always;'>&nbsp;</div>";
