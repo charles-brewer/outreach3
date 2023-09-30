@@ -289,7 +289,7 @@ namespace outreach3.Pages.Missions
             }
             else 
             {
-                htmlPage += "<img src='https://www.wfwcoutreach.com/maps/map" + mission.MissionMapId + ".png" + "' style='height:900px;' />";
+                htmlPage += "<img src='https://www.wfwcoutreach.com/maps/map_" + mission.MissionMapId + ".png" + "' style='height:900px;' />";
             }
             htmlPage += "</td></tr></table>";
             htmlPage += "<div style='page-break-after:always;'>&nbsp;</div>";

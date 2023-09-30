@@ -21,10 +21,6 @@ namespace outreach3.Data.Ministries
 
         public TypeVisit VisitationType { get; set; } = TypeVisit.None;
 
-        public DateTime? FollowUp { get; set; }
-
-
-        [ForeignKey(nameof(VisitationId))]
         public List<VisitationsMembers> VisitationMembers { get; set; } = new List<VisitationsMembers>();
     }
     public enum TypeVisit

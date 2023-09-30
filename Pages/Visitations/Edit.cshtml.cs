@@ -239,7 +239,7 @@ namespace outreach3.Pages.Visitations
 
             Visitation.ResidentId = Convert.ToInt32(Request.Query["residentId"]);
             Visitation.ChurchId = Convert.ToInt32(Request.Query["churchId"]);
-            Visitation.FollowUp = Convert.ToDateTime(Request.Form["followupDate"]);
+            
 
             try
             {
