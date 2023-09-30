@@ -1,0 +1,42 @@
+﻿@page
+@model outreach3.Pages.FollowUps.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-route-residentId="@Request.Query["residentId"]" asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FollowUp[0].DateDue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FollowUp[0].Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.FollowUp) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateDue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.FollowUpId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.FollowUpId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.FollowUpId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
