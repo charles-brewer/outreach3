@@ -232,7 +232,7 @@ namespace outreach3.Pages.Missions
             var mapCenter = missionMap.MapData.ToString().Replace("{lat:", "").Replace("lng:", "").Replace("}", "");
             var img = "https://maps.googleapis.com/maps/api/staticmap?center=" + mapDatas[0] + "&format=png&zoom=" + missionMap.MapZoom;
             img += "&size=640x640";
-            img += "&key=AIzaSyDB9MeOdXAO_GxZHZglRCcPhN1xPsdv3tM&maptype=hybrid";
+            img += "&key=xxxxxxx&maptype=hybrid";
             img = img.Replace("%20", "").Replace("{lat:", "").Replace("lng:", "").Replace("}", "").Replace(" ", "");
 
 
