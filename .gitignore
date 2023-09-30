@@ -364,7 +364,7 @@ FodyWeavers.xsd
 
 
 # Generated Maps
-maps/
+maps/*
 
 # Generated PDF files
 Missions/*.pdf
