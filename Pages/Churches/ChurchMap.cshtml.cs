@@ -18,6 +18,8 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.FileProviders;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using outreach3.Data.Ministries;
 
 namespace outreach3.Pages.ChurchMap
@@ -40,6 +42,17 @@ namespace outreach3.Pages.ChurchMap
 
         [BindProperty]
         public List<MapMarker> Markers { get; set; } = new List<MapMarker>();
+
+        public string GetScriptWithAPIKey()
+        {
+            using (StreamReader r = new StreamReader("settings.json"))
+            {
+                string json = r.ReadToEnd();
+                var res = (JObject)JsonConvert.DeserializeObject(json);
+                var returnValue = res.Value<string>("googlemapsAPI");
+                return returnValue;
+            }
+        }
 
         public async Task<IActionResult> OnGetAsync(int churchId)
         {

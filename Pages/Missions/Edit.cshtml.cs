@@ -17,6 +17,8 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.FileProviders;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using outreach3.Data;
 using outreach3.Data.Ministries;
 
@@ -35,6 +37,29 @@ namespace outreach3.Pages.Missions
                 IsDevlopement = true;
             }
         }
+
+        public string GetScriptWithAPIKey()
+        {
+            using (StreamReader r = new StreamReader("settings.json"))
+            {
+                string json = r.ReadToEnd();
+                var res = (JObject)JsonConvert.DeserializeObject(json);
+                var returnValue = res.Value<string>("googlemapsAPI");
+                return returnValue;                         
+            }
+        }
+
+        public string GetAPIKey()
+        {
+            using (StreamReader r = new StreamReader("settings.json"))
+            {
+                string json = r.ReadToEnd();
+                var res = (JObject)JsonConvert.DeserializeObject(json);
+                var returnValue = res.Value<string>("googlemapsAPIKey");
+                return returnValue;
+            }
+        }
+
 
         public bool IsDevlopement { get; set; } = false;
 
@@ -225,6 +250,8 @@ namespace outreach3.Pages.Missions
             return RedirectToPage("./Edit", new {churchId = churchId, missionId = missionId,  churchName = churchName });
         }
 
+
+
         private void SaveStaticMap(MissionMap? missionMap, string mapMarkerData)
         {
             var mapData = missionMap.MapData;
@@ -232,7 +259,7 @@ namespace outreach3.Pages.Missions
             var mapCenter = missionMap.MapData.ToString().Replace("{lat:", "").Replace("lng:", "").Replace("}", "");
             var img = "https://maps.googleapis.com/maps/api/staticmap?center=" + mapDatas[0] + "&format=png&zoom=" + missionMap.MapZoom;
             img += "&size=640x640";
-            img += "&key=xxxxxxx&maptype=hybrid";
+            img += "&key=" + GetAPIKey() + "&maptype=hybrid";
             img = img.Replace("%20", "").Replace("{lat:", "").Replace("lng:", "").Replace("}", "").Replace(" ", "");
 
 

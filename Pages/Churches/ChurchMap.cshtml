@@ -182,8 +182,7 @@
      <div id="map" name="map" style="font-size:1px;border: 2px;width:1024px;height:1024px; background-color:blue"></div>     
   
 </form>
-
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDB9MeOdXAO_GxZHZglRCcPhN1xPsdv3tM&callback=initMap" async defer></script>
+<script src="@Model.GetScriptWithAPIKey()" async defer></script>
 
 
 @section Scripts {

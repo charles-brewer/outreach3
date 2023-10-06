@@ -7,17 +7,18 @@ namespace outreach3.Data.Ministries
         public int FollowUpId { get; set; }
         public int ResidentId { get; set; }
         public DateTime DateDue { get; set; }
-        public FollowUpStatus Status { get; set; } = FollowUpStatus.Sheduled;
+        public FollowUpStatus Status { get; set; } = FollowUpStatus.None;
         public Member? Member { get; set; }
     }
 
     public enum FollowUpStatus
     {
-        Sheduled,
-        Due,
-        PastDue,
-        Cancelled,
-        Complete
+        None = 1,
+        Scheduled = 2,
+        Due = 3,
+        PastDue = 4,
+        Cancelled = 5,
+        Complete = 6
     }
 
 }

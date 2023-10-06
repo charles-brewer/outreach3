@@ -72,7 +72,7 @@
 
                 <td>
                     <a asp-page="./Edit" asp-route-churchId="@item.ChurchId" asp-route-missionId="@item.MissionId">Edit Mission Map</a> |
-                    <a asp-page="../Residents/Index" asp-route-churchId="@item.ChurchId" asp-route-missionId="@item.MissionId">Residents</a> |
+                    <a asp-page="../FollowUps/UpdateStatus" asp-route-churchId="@item.ChurchId" asp-route-missionId="@item.MissionId">Residents</a> |
                     <a asp-page="./Assignments" asp-route-churchId="@item.ChurchId" asp-route-missionId="@item.MissionId">Assignments</a> |
                     @if(User.IsInRole("ChurchAdmin") || User.IsInRole("Admin"))
                     {
