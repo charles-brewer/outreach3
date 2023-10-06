@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -16,11 +17,21 @@ namespace outreach3.Pages.Residents
         public IndexModel(outreach3.Data.ApplicationDbContext context)
         {
             _context = context;
+           
         }
+
+        public FollowUp FollowUp { get; set; }
 
         public IList<Resident> Residents { get; set; } = new List<Resident>();
         public string MissionName { get; set; } = "";
         public string ChurchId { get; set; } 
+
+        public string GetStatus(int? followUpId)
+        {
+            if(followUpId == null) { return "None"; }
+            return _context.FollowUp.FirstOrDefault(f => f.FollowUpId == followUpId).Status.ToString();
+
+        }
 
         public async Task OnGetAsync(int missionId)
         {
@@ -30,7 +41,7 @@ namespace outreach3.Pages.Residents
             {
                 Residents = await _context.Residents.Where(r=>r.MissionId==missionId).OrderBy(s=>s.number).ToListAsync();
             }
-            
+
         }
 
 

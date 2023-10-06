@@ -67,7 +67,7 @@ namespace outreach3.Data.Ministries
 
 
         public virtual List<Visitation>? Visitations { get; set; } = new List<Visitation>();
-        public virtual List<FollowUp>? Followups { get; set; } = new List<FollowUp>();
+        public int? FollowUpId { get; set; }
 
 
 

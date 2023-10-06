@@ -7,7 +7,7 @@
 
 <h4> @Model.MissionName Residents</h4>
 
-<div style="text-align:right;"><a asp-page="../Missions/Index" asp-route-churchId=@Request.Query["churchId"] asp-route-missionId ="@Request.Query["missionId"]">Return to Missions List</a></div>
+<div class="rightDiv"><a asp-page="../Missions/Index" asp-route-churchId=@Request.Query["churchId"] asp-route-missionId ="@Request.Query["missionId"]">Return to Missions List</a></div>
 
 <table class="table">
     <thead>
@@ -39,8 +39,10 @@
     </thead>
     <tbody>
      
-        @foreach (var item in Model.Residents.OrderBy(r=>r.BackColor).ThenBy(s=>s.number))
+        @foreach (var item in Model.Residents)
         {
+           
+
             <tr>
                 <td>
                     <div style="color:@item.ForeColor;text-align:center;width:32px;height:35px;background-image:url('../../images/@item.BackColor\.png'); background-repeat:no-repeat;background-position:left;background-size:100%;">
@@ -63,7 +65,14 @@
                     @Html.DisplayFor(modelItem => item.HomePhone)
                 </td>
                 <td>
-                    <a asp-page="../FollowUps/Index" asp-route-churchId="@Model.ChurchId" asp-route-missionId="@item.MissionId" asp-route-residentId="@item.ResidentId">Create a Follow Up</a>
+                   @if(item.FollowUpId!=null)
+                   {
+                        <a asp-page="../FollowUps/Index" asp-route-churchId="@Model.ChurchId" asp-route-missionId="@item.MissionId" asp-route-residentId="@item.ResidentId">@Model.GetStatus(item.FollowUpId).ToString()</a>
+                    }
+                    else
+                    {
+                        <a asp-page="../FollowUps/Index" asp-route-churchId="@Model.ChurchId" asp-route-missionId="@item.MissionId" asp-route-residentId="@item.ResidentId">None</a>
+                    }
                 </td>
                 <td>
                     <a asp-page="./Edit" asp-route-churchId="@Model.ChurchId" asp-route-missionId="@item.MissionId" asp-route-residentId="@item.ResidentId">Edit Resident</a>

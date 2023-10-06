@@ -16,7 +16,7 @@
             <input type="hidden" asp-for="FollowUp.FollowUpId" />
             <div class="form-group">
                 <label asp-for="FollowUp.ResidentId" class="control-label"></label>
-                <select asp-for="FollowUp.ResidentId" class="form-control" asp-items="ViewBag.ResidentId"></select>
+                <input asp-for="FollowUp.ResidentId" readonly="true" class="form-control"></input>
                 <span asp-validation-for="FollowUp.ResidentId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -26,19 +26,24 @@
             </div>
             <div class="form-group">
                 <label asp-for="FollowUp.Status" class="control-label"></label>
-                <select asp-for="FollowUp.Status" class="form-control"></select>
+                <select asp-for="FollowUp.Status" class="form-control">
+                    <option value="Scheduled">[Select a Status</option>
+                    <option value="Cancelled">Cancelled</option>
+                    <option value="Complete">Complete</option>
+
+                </select>
                 <span asp-validation-for="FollowUp.Status" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" asp-route-churchId="@Request.Query["churchId"]" asp-route-missionId="@Request.Query["missionId"]" asp-route-residentId="@Request.Query["residentId"]" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
+@*<div>
+    <a asp-page="./Index" asp-route-churchId="@Request.Query["churchId"]" asp-route-missionId="@Request.Query["missionId"]" asp-route-residentId="@Request.Query["residentId"]" >Back to Followup List</a>
+</div>*@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -25,7 +25,7 @@ namespace outreach3.Pages.ChurchGoals
         {
             if (_context.ChurchGoals != null)
             {
-                ChurchGoals = await _context.ChurchGoals.ToListAsync();
+                ChurchGoals = await _context.ChurchGoals.Where(g => g.ChurchId == Convert.ToInt32(Request.Query["churchId"])).ToListAsync();
             }
         }
     }

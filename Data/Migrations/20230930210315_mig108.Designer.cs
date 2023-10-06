@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using outreach3.Data;
 
@@ -11,9 +12,11 @@ using outreach3.Data;
 namespace outreach3.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230930210315_mig108")]
+    partial class mig108
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -321,6 +324,9 @@ namespace outreach3.Data.Migrations
 
                     b.HasIndex("MemberId");
 
+                    b.HasIndex("ResidentId")
+                        .IsUnique();
+
                     b.ToTable("FollowUp");
                 });
 
@@ -483,9 +489,6 @@ namespace outreach3.Data.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("FollowUpId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ForeColor")
                         .HasColumnType("nvarchar(max)");
 
@@ -628,6 +631,12 @@ namespace outreach3.Data.Migrations
                         .WithMany()
                         .HasForeignKey("MemberId");
 
+                    b.HasOne("outreach3.Data.Ministries.Resident", null)
+                        .WithOne("Followup")
+                        .HasForeignKey("outreach3.Data.Ministries.FollowUp", "ResidentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Member");
                 });
 
@@ -720,6 +729,8 @@ namespace outreach3.Data.Migrations
 
             modelBuilder.Entity("outreach3.Data.Ministries.Resident", b =>
                 {
+                    b.Navigation("Followup");
+
                     b.Navigation("Visitations");
                 });
 
