@@ -371,7 +371,8 @@ Missions/*.pdf
 
 
 # Files with Google API keys
+/settings.json
 
-Missions/Edit.cshtml
-Missions/Edit.cshtml.cs
-Churches/ChurchMap.cshtml
+# Generated Missions
+/Content/Missions/*.pdf
+
