@@ -371,5 +371,9 @@ Missions/*.pdf
 
 
 # Files with Google API keys
+/settings.json
 
-settings.json
+# Generated Missions
+/Content/Missions/*.pdf
+
+
