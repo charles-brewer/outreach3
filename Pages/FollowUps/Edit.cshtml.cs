@@ -23,14 +23,14 @@ namespace outreach3.Pages.FollowUps
         [BindProperty]
         public FollowUp FollowUp { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? followUpId, int residentId, int missionId, int churchId)
         {
-            if (id == null || _context.FollowUp == null)
+            if (followUpId == null || _context.FollowUp == null)
             {
                 return NotFound();
             }
 
-            var followup =  await _context.FollowUp.FirstOrDefaultAsync(m => m.FollowUpId == id);
+            var followup =  await _context.FollowUp.FirstOrDefaultAsync(m => m.FollowUpId == followUpId);
             if (followup == null)
             {
                 return NotFound();
@@ -51,7 +51,7 @@ namespace outreach3.Pages.FollowUps
             _context.Attach(FollowUp).State = EntityState.Modified;
 
             try
-            {
+            {             
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -66,7 +66,7 @@ namespace outreach3.Pages.FollowUps
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("../Residents/Index", new { churchId = Request.Query["churchId"], missionId = Request.Query["missionId"], residentId = Request.Query["residentId"] });
         }
 
         private bool FollowUpExists(int id)

@@ -19,7 +19,7 @@ namespace outreach3.Pages.FollowUps
             _context = context;
         }
 
-        public IList<FollowUp> FollowUp { get;set; } = default!;
+        public IList<FollowUp> FollowUp { get;set; }
 
         public async Task OnGetAsync(int churchId, int MissionId, int residentId)
         {
@@ -27,6 +27,25 @@ namespace outreach3.Pages.FollowUps
             {
                 FollowUp = await _context.FollowUp.Where(f=>f.ResidentId==residentId).ToListAsync();
             }
+        }
+
+        public async Task<IActionResult> OnPostDeleteAsync(int churchId, int missionId,int residentId, int? followUpId)
+        {
+            var followUp = await _context.FollowUp.FirstOrDefaultAsync(f => f.FollowUpId == followUpId);
+
+            if (followUp != null)
+            {
+                _context.FollowUp.Remove(followUp);
+            }
+           
+
+            if (_context.Residents.FirstOrDefault(r => r.ResidentId == residentId).FollowUpId != null)
+            {
+                _context.Residents.FirstOrDefault(r => r.ResidentId == residentId).FollowUpId = null;
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToPage("../Residents/Index", new { churchId, missionId });
         }
     }
 }

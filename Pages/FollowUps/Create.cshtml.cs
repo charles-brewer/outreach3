@@ -20,10 +20,12 @@ namespace outreach3.Pages.FollowUps
         }
         
         public int ResidentId { get; set; } = 0;
-        public FollowUpStatus Status { get; set; } = FollowUpStatus.Sheduled;
-        public IActionResult OnGet(int residentId)
+        private int _missionId=0;
+        public FollowUpStatus Status { get; set; } = FollowUpStatus.Scheduled;
+        public IActionResult OnGet(int residentId, int missionId)
         {
             ResidentId = residentId;
+            _missionId = missionId;
             return Page();
         }
 
@@ -38,12 +40,19 @@ namespace outreach3.Pages.FollowUps
             {
                 return Page();
             }
-            FollowUp = new FollowUp();
+            
             FollowUp.ResidentId = residentId;
+
             _context.FollowUp.Add(FollowUp);
+
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index", new { residentId = residentId });
+
+            var res = _context.Residents.FirstOrDefault(r=>r.ResidentId == residentId);
+            res.FollowUpId = FollowUp.FollowUpId;
+            await _context.SaveChangesAsync();
+
+            return RedirectToPage("./UpdateStatus", new { residentId = residentId, missionId = Request.Query["missionId"] });
         }
     }
 }
