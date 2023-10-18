@@ -25,13 +25,20 @@
         public DateTime GoalDate { get; set; }
 
 
-        public int NumberOfDoors { get; set; }
+
 
         public int NumberOfConnections { get; set; }
+
+        //public int NumberOfDoors { get; set; }
+
+        //public int NumberOfResidentsInGoal { get; set; }
+
+        //public int NumberOfDoorHangersLeft { get; set; }
 
         public int NumberOfDoorsGoal { get; set; }
 
         public int NumberOfGreetsGoal { get; set; }
+        //public int NumberOfConnectionsMade { get; set; }
 
 
     }

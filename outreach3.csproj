@@ -8,21 +8,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\ChurchGoals\**" />
     <Compile Remove="Pages\Mission\**" />
     <Compile Remove="wwwroot\Content\**" />
     <Compile Remove="~\**" />
+    <Content Remove="Pages\ChurchGoals\**" />
     <Content Remove="Pages\Mission\**" />
     <Content Remove="wwwroot\Content\**" />
     <Content Remove="~\**" />
+    <EmbeddedResource Remove="Pages\ChurchGoals\**" />
     <EmbeddedResource Remove="Pages\Mission\**" />
     <EmbeddedResource Remove="wwwroot\Content\**" />
     <EmbeddedResource Remove="~\**" />
+    <None Remove="Pages\ChurchGoals\**" />
     <None Remove="Pages\Mission\**" />
     <None Remove="wwwroot\Content\**" />
     <None Remove="~\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Ministries\ChurchGoal.cs" />
     <Compile Remove="Pages\Missions\Addresses.cshtml.cs" />
   </ItemGroup>
 

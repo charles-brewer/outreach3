@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using outreach3.Data;
 
@@ -11,9 +12,11 @@ using outreach3.Data;
 namespace outreach3.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231011214609_mig120")]
+    partial class mig120
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -254,7 +257,7 @@ namespace outreach3.Data.Migrations
 
                     b.HasKey("ChurchId");
 
-                    b.ToTable("Churches", (string)null);
+                    b.ToTable("Churches");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.ChurchGoal", b =>
@@ -278,9 +281,6 @@ namespace outreach3.Data.Migrations
                     b.Property<int>("NumberOfConnections")
                         .HasColumnType("int");
 
-                    b.Property<int>("NumberOfConnectionsMade")
-                        .HasColumnType("int");
-
                     b.Property<int>("NumberOfDoors")
                         .HasColumnType("int");
 
@@ -297,7 +297,7 @@ namespace outreach3.Data.Migrations
 
                     b.HasIndex("ChurchId");
 
-                    b.ToTable("ChurchGoals", (string)null);
+                    b.ToTable("ChurchGoals");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.FollowUp", b =>
@@ -324,7 +324,7 @@ namespace outreach3.Data.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("FollowUp", (string)null);
+                    b.ToTable("FollowUp");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.MapMarker", b =>
@@ -369,7 +369,7 @@ namespace outreach3.Data.Migrations
 
                     b.HasIndex("MissionMapId");
 
-                    b.ToTable("MapMarkers", (string)null);
+                    b.ToTable("MapMarkers");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.Member", b =>
@@ -395,7 +395,7 @@ namespace outreach3.Data.Migrations
 
                     b.HasKey("MemberId");
 
-                    b.ToTable("Members", (string)null);
+                    b.ToTable("Members");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.Mission", b =>
@@ -435,7 +435,7 @@ namespace outreach3.Data.Migrations
 
                     b.HasIndex("MissionMapId");
 
-                    b.ToTable("Missions", (string)null);
+                    b.ToTable("Missions");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.MissionMap", b =>
@@ -463,7 +463,7 @@ namespace outreach3.Data.Migrations
 
                     b.HasKey("MissionMapId");
 
-                    b.ToTable("MissionMaps", (string)null);
+                    b.ToTable("MissionMaps");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.Resident", b =>
@@ -514,7 +514,7 @@ namespace outreach3.Data.Migrations
 
                     b.HasIndex("MissionId");
 
-                    b.ToTable("Residents", (string)null);
+                    b.ToTable("Residents");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.Visitation", b =>
@@ -547,7 +547,7 @@ namespace outreach3.Data.Migrations
 
                     b.HasIndex("ResidentId");
 
-                    b.ToTable("Visitations", (string)null);
+                    b.ToTable("Visitations");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.VisitationsMembers", b =>
@@ -562,7 +562,7 @@ namespace outreach3.Data.Migrations
 
                     b.HasIndex("VisitationId");
 
-                    b.ToTable("VisitationMembers", (string)null);
+                    b.ToTable("VisitationMembers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

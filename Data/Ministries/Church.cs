@@ -57,7 +57,7 @@ namespace outreach3.Data.Ministries
 
         public List<Mission>? Missions { get; set; } = new List<Mission>();
 
-        public List<ChurchGoal>? Goals { get; set; } = new List<ChurchGoal>();
+       // public List<ChurchGoal>? Goals { get; set; } = new List<ChurchGoal>();
 
     }
 

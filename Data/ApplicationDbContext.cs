@@ -104,7 +104,7 @@ namespace outreach3.Data
                
         }
 
-        public DbSet<outreach3.Data.Ministries.ChurchGoal> ChurchGoals { get; set; } = default!;
+        //public DbSet<outreach3.Data.Ministries.ChurchGoal> ChurchGoals { get; set; } = default!;
 
         public DbSet<outreach3.Data.Ministries.FollowUp> FollowUp { get; set; } = default!;
     }

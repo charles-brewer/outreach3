@@ -10,20 +10,26 @@
 <h4>Mission Assignments</h4>
 <div style="text-align:right;"><a asp-page="./Index" asp-route-churchId="@Request.Query["churchId"]" asp-route-missionId="@Request.Query["missionId"]">Return to Missions List</a></div>
 <hr />
-
+<form method="post">
 <table class="table">
     <tr><td>
-            <form method="post">
 
-                <a href="@Url.Page("Assignments", "DownloadFile", new { churchId=Request.Query["churchId"], missionId=Request.Query["missionId"] })">Print Mission to PDF</a>
 
-            </form>
+                <input type="submit" asp-page-handler="DownLoadFile" value="Download PDF for Print" asp-route-churchId="@Request.Query["churchId"]" asp-route-missionId="@Request.Query["missionId"]" />
+
+            
+                <select asp-for="@Model.NumberOfCopies" name="copies" asp-items="@Model.CopyOptions" size="1" class="form-control">
+                    <option value="0">[Select the Number of Document Forms]</option>                  
+                </select>
+
+               
+      
     </td><td></td></tr>
     <tr>
         <td class="col-md-8">
             <div class="row">
                 <div class="col-md-8">
-                    <form method="post">
+
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input type="hidden" asp-for="Mission.MissionId" />
                         <div class="form-group">
@@ -59,7 +65,7 @@
                             <input type="submit" asp-page-handler="Save" value="Save" asp-route-churchId="@Request.Query["churchId"]" asp-route-missionId="@Request.Query["missionId"]" class="btn btn-primary" />
                             <input type="submit" asp-page-handler="Reset" value="Reset" asp-route-churchId="@Request.Query["churchId"]" asp-route-missionId="@Request.Query["missionId"]" class="btn btn-primary" />                           
                         </div>
-                    </form>
+                    
                 </div>
             </div>
         </td>
@@ -69,6 +75,8 @@
         </td>
     </tr>
 </table>
+</form>
+
 
 
 @section Scripts {
