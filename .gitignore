@@ -378,3 +378,11 @@ Missions/*.pdf
 
 
 /Content/Missions/Charlie'sMission1.pdf
+/Data/Migrations/20231011141450_mig113.Designer.cs
+/Data/Migrations/20231011141450_mig113.cs
+/Data/Migrations/20231011141336_mig112.Designer.cs
+/Data/Migrations/20231011141336_mig112.cs
+/Data/Migrations/20231011141146_mig111.Designer.cs
+/Data/Migrations/20231011141146_mig111.cs
+/Data/Migrations/20231011141027_mig110.Designer.cs
+/Data/Migrations/20231011141027_mig110.cs
