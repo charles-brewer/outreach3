@@ -4,9 +4,14 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Identity.Client;
 using outreach3.Data;
 
-
+using System.Diagnostics;
+using outreach3.Data.Ministries;
+using Coravel;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -15,6 +20,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+
 
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(
@@ -29,6 +36,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(
     .AddRoles<IdentityRole>()
     .AddDefaultUI()
     .AddDefaultTokenProviders();
+
 
 
 
@@ -48,7 +56,19 @@ builder.Services.AddRazorPages(options => {
 
 builder.Services.AddAuthentication();
 
+builder.Services.AddScheduler();
+builder.Services.AddTransient<SendWeeklyEmailReports>();
+
 var app = builder.Build();
+
+
+app.Services.UseScheduler(scheduler =>
+{
+   
+   scheduler.Schedule<SendWeeklyEmailReports>().Weekly().Tuesday();
+    
+});
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -74,10 +94,13 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<ApplicationDbContext>();
     context.Database.Migrate();
     var userMgr = services.GetRequiredService<UserManager<IdentityUser>>();
-    var roleMgr = services.GetRequiredService<RoleManager<IdentityRole>>();  
+    var roleMgr = services.GetRequiredService<RoleManager<IdentityRole>>();
+
     
     IdentitySeedData.Initialize(context, userMgr, roleMgr).Wait();
 }
+
+
 
 // setup app's root folders
 AppDomain.CurrentDomain.SetData("ContentRootPath", app.Environment.ContentRootPath);
@@ -88,4 +111,8 @@ app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
 
 
+
+
 app.Run();
+
+

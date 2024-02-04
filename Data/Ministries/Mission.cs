@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -43,8 +44,7 @@ namespace outreach3.Data.Ministries
         public string Status { get => status; set => status = value; }
 
         public string? AssignedTo { get => assignedTo; set => assignedTo = value; }
-
-        public virtual List<Resident> Residents { get; set; }
+        public virtual ICollection<Resident> Residents { get; } = new List<Resident>();
 
         public virtual MissionMap MissionMap { get; set; } = new MissionMap();
 
@@ -59,7 +59,7 @@ namespace outreach3.Data.Ministries
 
         public int ChurchId { get; set; }
 
-
+        public int GoalId { get; set; }
 
     }
 }

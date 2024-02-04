@@ -33,7 +33,8 @@
             </th>
             <th>
                Follow Up
-            </th>
+            </th>    
+            <th>Visits</th>
             <th></th>
         </tr>
     </thead>
@@ -74,6 +75,11 @@
                         <a asp-page="../FollowUps/Index" asp-route-churchId="@Model.ChurchId" asp-route-missionId="@item.MissionId" asp-route-residentId="@item.ResidentId">None</a>
                     }
                 </td>
+                <td>
+                    @((Int32)item.Visitations.Count() / 2)
+
+                </td>
+               
                 <td>
                     <a asp-page="./Edit" asp-route-churchId="@Model.ChurchId" asp-route-missionId="@item.MissionId" asp-route-residentId="@item.ResidentId">Edit Resident</a>
                 </td>

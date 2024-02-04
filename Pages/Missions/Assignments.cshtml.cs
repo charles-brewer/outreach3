@@ -19,11 +19,13 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.RulesetToEditorconfig;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Win32.SafeHandles;
 using NuGet.Common;
 using outreach3.Data.Ministries;
+using outreach3.Pages.Visitations;
 using SelectPdf;
 
 namespace outreach3.Pages.Missions
@@ -73,7 +75,7 @@ namespace outreach3.Pages.Missions
             //Mission.AssignedTo = mission.AssignedTo;
 
             List<OptionItems> options = new List<OptionItems>();
-            for (var i = 0; i < 5; i++)
+            for (var i = 0; i < 6; i++)
             {
                 var item = new OptionItems
                 {
@@ -212,15 +214,16 @@ namespace outreach3.Pages.Missions
             /***********************Table of Residents**************************/
             htmlPage += "<table style='width:93%;'><tr><td>Number</td><td>Name</td><td>Address</td><td>Door Hanger</td><td>Follow Up</td></tr>";
 
-            var residents = _context.Residents.Where(r => r.MissionId == missionId).ToList();
             var map = await _context.MissionMaps.FirstOrDefaultAsync(m => m.MissionMapId == mission.MissionMapId);
 
             var rowCounter = 0;
-            foreach (var res in residents)
+
+            foreach(var res in _context.Residents.Where(r=>r.MissionId==missionId))
             {
                 rowCounter++;
-                if (rowCounter == 33)
+                if (rowCounter==33)
                 {
+                    rowCounter = 1;
                     htmlPage += "</table>";
                     /***********************Table of Residents**************************/
                     htmlPage += "<div style='page-break-after:always;'>&nbsp;</div>";
@@ -257,25 +260,54 @@ namespace outreach3.Pages.Missions
                 htmlPage += "<td class='followUp'>__________ <br/><span style='font-size:8pt;'>(Days/Weeks(Circle)</span></td>";
                 htmlPage += "</tr>";
             }
+
             htmlPage += "</table>";
             /***********************Table of Residents**************************/
+
+            /***********************Page Break**************************/
             htmlPage += "<div style='page-break-after:always;'>&nbsp;</div>";
+            /***********************Page Break**************************/
 
 
+            var residents = from ms in _context.Missions.DefaultIfEmpty()
+                            join r in _context.Residents on ms.MissionId equals r.MissionId into a
+                            from aa in a
+                            join v in _context.Visitations on aa.ResidentId equals v.ResidentId into b
+                            from bb in b                            
+                            where aa.MissionId == missionId
+                            select new
+                            {
+                                BackColor = aa.BackColor,
+                                OneToEight = aa.OneToEight,
+                                FirstName = aa.FirstName,
+                                LastName = aa.LastName,
+                                Address = aa.Address,
+                                Visitations = aa.Visitations.ToList(),
+                                ResidentId = bb.ResidentId
+                            };
+
+
+
+
+
+
+            /***********************Acquaintances**************************/
             htmlPage += "<br /><h3>" + mission.Name + "</h3>";
             htmlPage += "Last Date Mission Completed:" + mission.DateLastCompleted.ToString().Replace("12:00:00 AM", "") + "<br/>";
-            /***********************Acquaintances**************************/
+            
             int acqCount = 0;
 
-            var MembersOfVisitation = await _context.VisitationMembers.Select(e => e.Member).ToListAsync();
+            var resGroup= residents.GroupBy(r=>r.ResidentId).ToList();
 
-            foreach (Resident res in residents)
+            var residentIds = new List<int>();
+
+            foreach (var resi in resGroup.ToList())
             {
-                foreach (var visit in _context.Visitations.Where(v => v.ResidentId == res.ResidentId))
-                {
+                var res = resi.FirstOrDefault();
+                
+
                     acqCount++;
                     htmlPage += "<hr style='color:navy;' />";
-                    htmlPage += "<b>Date: </b> " + visit.VisitationDate.ToString().Replace("12:00:00 AM", "") + "<br />";
                     htmlPage += "<div style='page-break-after:avoid;'>";
                     htmlPage += "<b>Residents Name:</b> " + res.FirstName + " " + res.LastName + "<br/>";
                     htmlPage += "<b>Address:</b> " + res.Address + "<br />";
@@ -290,31 +322,37 @@ namespace outreach3.Pages.Missions
                     {
                         htmlPage += $"<tr style='height:18px;border:1px solid navy;'><td class='tdNumber'><img src='https://www.wfwcoutreach.com/Images/{res.BackColor}{res.OneToEight}.png' style='width:18px;' /></td>";
                     }
-
-                    htmlPage += $"<div><span style='font-weight:bold;'>Outreachers:</span><br/>";
-
+                    htmlPage += $"<div>";
 
 
-                    foreach (var visitationMember in MembersOfVisitation)
+
+                    foreach (var visit in res.Visitations)
                     {
-                        htmlPage += $"{visitationMember.Name}<br />";
-                    }
 
+                        htmlPage += "<b>Date: </b> " + visit.VisitationDate.ToString().Replace("12:00:00 AM", "") + "<br />";
+                        //htmlPage += "<span style='font-weight:bold;'>Outreachers:</span><br/>";
+                        foreach (var visitationMember in visit.VisitationMembers)
+                        {
+                            htmlPage += $"{visitationMember.Member.Name}<br />";
+                        }
+                        htmlPage += "<b>Details: </b>";
+                        if (visit.VisitationType == TypeVisit.DoorHanger)
+                        {
+                            htmlPage += "Left Door Hanger.<br />";
+                        }
+                        htmlPage += "<div style='page-break-after:avoid;'>" + visit.VisitationDetails + "</div><br/>";
+                        htmlPage += "</div>"; ;
+
+                    }
 
                     htmlPage += "</div><br />";
 
 
-                    htmlPage += "<b>Details: </b>";
-                    if (visit.DoorHangar)
-                    {
-                        htmlPage += "Left Door Hanger.<br />";
-                    }
-                    htmlPage += "<div style='page-break-after:avoid;'>" + visit.VisitationDetails + "</div><br/>";
 
-                    htmlPage += "</div>";
                     htmlPage += "<hr style='color:navy;' />";
-                }
+                
             }
+           
             /***********************Acquaintances**************************/
 
             if (acqCount == 0)
@@ -367,10 +405,7 @@ namespace outreach3.Pages.Missions
 
             htmlPage += "</body></html>";
             return await ExportToPDF(mission.Name, htmlPage);
-
-
-
-            return RedirectToPage("./Assignments", new { churchId = Request.Query["churchId"], missionId = Mission.MissionId });
+            
         }
 
 

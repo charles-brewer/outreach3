@@ -26,6 +26,9 @@ namespace outreach3.Data
         public DbSet<Visitation> Visitations { get; set; } = default!;
         public DbSet<MissionMap> MissionMaps { get; set; } = default!;
         public DbSet<MapMarker> MapMarkers { get; set; } = default!;
+        public DbSet<ChurchGoal> ChurchGoals { get; set; } = default!;
+
+        public DbSet<ChurchMembers> ChurchMembers { get; set; } = default!;
 
 
         //For Unit Testing

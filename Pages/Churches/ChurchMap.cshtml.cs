@@ -107,35 +107,7 @@ namespace outreach3.Pages.ChurchMap
         }
 
    
-        public (string, string) GetColor(int num)
-        {
-            if (num is > 0 and < 9)
-            {
-                return ("blue", "white");
-            }
-            if (num is >= 9 and <= 16)
-            {
-                return ("brown", "white");
-            }
-            if (num is >= 17 and <= 24)
-            {
-                return ("green", "white");
-            }
-            if (num is >= 25 and <= 32)
-            {
-                return ("red", "white");
-            }
-            if (num is >= 33 and <= 40)
-            {
-                return ("white", "navy");
-            }
-            if (num is >= 40)
-            {
-                return ("yellow", "navy");
-            }
-            return ("black", "white");
-        }
-
+      
         private bool MissionExists(int id)
         {
             return (_context.Missions?.Any(e => e.MissionId == id)).GetValueOrDefault();

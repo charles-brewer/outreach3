@@ -3,7 +3,18 @@
 
 <h4>Church Goals</h4>
 <p>
+   
+    <div class="rightDiv">
+        <a asp-page="../Churches/ChurchesMenu" asp-route-churchId="@Request.Query["churchId"]">Return to Church Menu</a>
+    </div> 
     <a asp-page="Create" asp-route-churchId="@Request.Query["churchId"]">Create New</a>
+    
+    <form method="post">
+        <input type="submit" class="linkInput" style="display:@Model.EmailNotificationAdd;" asp-page-handler="AddEmail" asp-route-churchId="@Request.Query["churchId"]" value="Add Weekly Email Notifications" name="addEmail" />
+        <input type="submit" class="linkInput" style="display:@Model.EmailNotificationRemove;" asp-page-handler="RemoveEmail" asp-route-churchId="@Request.Query["churchId"]" value="Remove Weekly Email Notifications" name="removeEmail" />
+
+    </form>
+    
 </p>
 <table class="table">
     <thead>
@@ -20,15 +31,11 @@
             <th>
                 @Html.DisplayNameFor(model => model.ChurchGoals[0].NumberOfDoorsGoal)
             </th>
+           
             <th>
-                @Html.DisplayNameFor(model => model.ChurchGoals[0].NumberOfConnections)
+                @Html.DisplayNameFor(model => model.ChurchGoals[0].NumberOfDoors)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ChurchGoals[0].NumberOfDoorsGoal)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ChurchGoals[0].NumberOfGreetsGoal)
-            </th>
+            
             <th></th>
         </tr>
     </thead>
@@ -48,20 +55,14 @@
                     @Html.DisplayFor(modelItem => item.NumberOfDoorsGoal)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.NumberOfConnections)
+                @Html.DisplayFor(modelItem => item.NumberOfDoors)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.NumberOfDoorsGoal)
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => item.NumberOfGreetsGoal)
-            </td>
-            <td>
-                    <a asp-page="./Details" asp-route-churchId="@item.ChurchId">Details</a>
-                    @if (User.IsInRole("ChurchAdmin") || User.IsInRole("Admin"))
+                    <a asp-page="./Details" asp-route-churchId="@item.ChurchId" asp-route-churchGoalId="@item.ChurchGoalId">Details</a>
+                    @if (User.IsInRole("ChurchAdmin") || User.IsInRole("Admin") || User.IsInRole("GoalEditor"))
                 {
-                <a asp-page="./Edit" asp-route-churchId="@item.ChurchId">Edit</a> 
-                <a asp-page="./Delete" asp-route-churchId="@item.ChurchGoalId">Delete</a>
+                        <a asp-page="./Edit" asp-route-churchId="@item.ChurchId" asp-route-churchGoalId="@item.ChurchGoalId">Edit</a>
+                        <a asp-page="./Delete" asp-route-churchGoalId="@item.ChurchGoalId" asp-route-churchId="@item.ChurchId">Delete</a>
                 }
             </td>
         </tr>

@@ -61,34 +61,29 @@
                     <tr>
                         <td>
                             <div class="form-group form-check">
-                                <label class="form-check-label" asp-for="Visitation.VisitationType" class="control-label">
+                                <label class="form-check-label" asp-for="Visitation.VisitationType" class="control-label" >
                                     @Html.RadioButtonFor(x => x.Visitation.VisitationType, TypeVisit.DoorHanger) Left Door Hanger
                                 </label>
                             </div>
 
                             <div class="form-group form-check">
-                                <label class="form-check-label" asp-for="Visitation.VisitationType" class="control-label">
+                                <label class="form-check-label" asp-for="Visitation.VisitationType" class="control-label" >
                                     @Html.RadioButtonFor(x => x.Visitation.VisitationType, TypeVisit.Greeted) Greeted
                                 </label>
-                            </div>
-
-                            <div class="form-group form-check">
-                                <label class="form-check-label" asp-for="Visitation.VisitationType" class="control-label">
-                                    @Html.RadioButtonFor(x => x.Visitation.VisitationType, TypeVisit.None ) None
-                                </label>
-                            </div>
+                            </div>                           
 
                             <div class="form-group">
                                 <input onclick="validateType()" type="submit" value="Save" asp-page-handler="Save" asp-route-churchId="@Request.Query["churchId"]" asp-route-missionId="@Request.Query["missionId"]"
                                        asp-route-residentId="@Request.Query["residentId"]" class="btn btn-primary" />
                             </div>
+
+                            <div class="form-group">
+                                <input type="submit" value="Cancel" asp-page-handler="Cancel" asp-route-churchId="@Request.Query["churchId"]" asp-route-missionId="@Request.Query["missionId"]"
+                                       asp-route-residentId="@Request.Query["residentId"]" class="btn btn-primary" />
+                            </div>
                         </td>
-                       @* <td class="tdAlignRightAndSmall">
-                            <label>Select a Follow Up Date</label>
-                                <input asp-for="FollowUp.DateDue" type="date" name="followupDate" style="width:250px;" />
-                            <span asp-validation-for="FollowUp.DateDue" class="text-danger"></span>
-                            
-                        </td>*@
+
+                       
                        
                     </tr>
                 </table>

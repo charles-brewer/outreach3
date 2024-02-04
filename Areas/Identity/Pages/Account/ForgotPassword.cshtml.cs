@@ -4,9 +4,11 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Mail;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -74,6 +76,21 @@ namespace outreach3.Areas.Identity.Pages.Account
                     Input.Email,
                     "Reset Password",
                     $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+
+
+                //Initialize WebMail helper
+                MailMessage msg = new MailMessage();
+                msg.From = new MailAddress("postmaster@wfwcoutreach.com");
+                msg.To.Add(Input.Email);
+                msg.Subject = "Reset Password";
+                msg.Body = $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
+
+                SmtpClient smtpClient = new SmtpClient("m06.internetmailserver.net", Convert.ToInt32(587));
+                System.Net.NetworkCredential credentials = new System.Net.NetworkCredential("postmaster@wfwcoutreach.com", "Tlimlamsps@&ok100");
+                smtpClient.Credentials = credentials;
+                smtpClient.EnableSsl = true;
+                smtpClient.SendAsync(msg.From.ToString(), msg.To.ToString(), msg.Subject.ToString(), msg.Body.ToString(), null);
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

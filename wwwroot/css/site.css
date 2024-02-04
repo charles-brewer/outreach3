@@ -33,6 +33,28 @@ body {
     background-color:#ededed;
     border-bottom: 1px solid gray;
 }
+
+.tdWide {
+    vertical-align:top;
+    width: 400px;
+    
+    padding:10px; 
+}
+
+.divRounded {
+    border-radius: 25px;
+    border: 2px outset #cccccc;
+    background-color: #f7feff;
+}
+.divRounded-1 {
+    border-radius: 25px;
+    border: 5px groove #f9f7f7;
+    padding: 12px;
+    text-align: left;
+    color:cornflowerblue;
+    font-family: 'Comic Sans MS';
+
+}
 .tdAlignRightAndSmall {
     width: 400px;
     text-align:center;
@@ -210,4 +232,13 @@ a {
 td {
     text-shadow: 1px 1px steelblue;
     color: black;
+}
+
+.panelHidden
+{
+visibility:visible;
+color:red;
+background:transparent;
+border:none;
+width:500px;
 }

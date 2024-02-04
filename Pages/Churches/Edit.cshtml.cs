@@ -25,7 +25,14 @@ namespace outreach3.Pages.Churches
             _context = context;
         }
 
-        [BindProperty]
+        public List<SelectListItem> AllUsers { get; set; }
+
+
+        public List<SelectListItem> SiteUsers { get; set; }
+
+
+        public string SelectedUser { get; set; }
+
         public Church Church { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int churchId)
@@ -103,7 +110,7 @@ namespace outreach3.Pages.Churches
             int i;
             if (!int.TryParse(memberId, out i))
             {
-                return RedirectToPage("Edit", new { id = _churchId.ToString() });
+                return RedirectToPage("Edit", new { churchId = _churchId.ToString() });
             }
             var mid = Request.Form["selectedMember"];
 
@@ -137,14 +144,7 @@ namespace outreach3.Pages.Churches
         }
 
 
-        public List<SelectListItem> AllUsers { get; set; }
-
-
-        public List<SelectListItem> SiteUsers { get; set; }
-
-
-        public string SelectedUser { get; set; }
-
+      
 
 
         private bool SiteExists(int id)

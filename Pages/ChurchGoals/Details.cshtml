@@ -1,9 +1,10 @@
 ﻿@page
+@using System.Web;
 @model outreach3.Pages.ChurchGoals.DetailsModel
 
 <div>
     <div style="text-align:right;"><a asp-page="./Index" asp-route-churchId="@Request.Query["churchId"]">Return to Church Goals</a></div>
-   
+
     <h4>@Model.ChurchGoal.Name</h4>
     <hr />
     <dl class="row">
@@ -19,7 +20,7 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ChurchGoal.GoalDate)
-        </dd>       
+        </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ChurchGoal.NumberOfDoorsGoal)
         </dt>
@@ -40,28 +41,135 @@
 <hr />
 
 <table style="width:100%">
+    <tr><td colspan="2" class="centerDiv"><a href="#" onclick="show('myChart');">Line Chart</a>&nbsp;&nbsp;&nbsp;&nbsp;<a onclick="show('myChart2');" href="#">Bar Chart</a></td></tr>
     <tr>
-        <td style="width:50%;">
+        <td style="width:100%;">
             <div class="chart-container">
-                <canvas id="myChart"></canvas>
+                <canvas id="myChart" height="270" width="1000" style="display:inline-block;border:1px blue solid;"></canvas> 
+                <canvas id="myChart2" height="270" width="1000" style="display:none;border:1px blue solid;"></canvas>
             </div>
-        </td>
-        <td style="width:50%;">
-            <div class="chart-container">
-                <canvas id="myChart2"></canvas>
-            </div>
+       
+            
         </td>
     </tr>
 </table>
 
-<script>
-    document.addEventListener('DOMContentLoaded', (event) => {
+<div>
+    <canvas id="myChart"></canvas>
+</div>
 
-        var ctx = document.getElementById('myChart');
-        var myChart = new Chart(ctx, @Html.Raw(Model.ChartJson) );
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        var ctx2 = document.getElementById('myChart2');
-        var myChart2 = new Chart(ctx2, @Html.Raw(Model.ChartJson2) );
+<script type="text/javascript">
 
+
+    function show(c)
+    {
+        document.getElementById("myChart").style.display="none";
+        document.getElementById("myChart2").style.display = "none";
+        document.getElementById(c).style.display = "inline-block";
+    }
+    var decodedLabels = @Html.Raw(HttpUtility.HtmlDecode(Model.GetLabels));
+    var decodedGoalline = @Html.Raw(HttpUtility.HtmlDecode(Model.GetGoalline));
+    var decodedVisited = @Html.Raw(HttpUtility.HtmlDecode(Model.GetVisited));
+    var decodedGreetedGoal = @Html.Raw(HttpUtility.HtmlDecode(Model.GetGreetedGoal));
+    var decodedGreeted = @Html.Raw(HttpUtility.HtmlDecode(Model.GetGreeted));
+
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: decodedLabels,
+            datasets: [{
+                label: 'Goal Line',
+                data: decodedGoalline,
+                borderWidth: 2,
+                pointRadius: 2,
+                borderColor:'Navy'
+            },
+            {
+                label: 'Visited',
+                data: decodedVisited,
+                borderWidth: 2,
+                pointRadius: 2,
+                borderColor: 'SkyBlue'
+            },
+            {
+                label: 'Greeted',
+                data: decodedGreeted,
+                borderWidth: 2,
+                pointRadius: 2,
+                borderColor:'lime'
+            },
+            {
+                label: 'Greeted Goal Line',
+                data: decodedGreetedGoal,
+                borderWidth: 2,
+                pointRadius: 2,
+                borderColor: 'green'
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,                   
+                }
+            }            
+        }
     });
+
+
+
+    const ctx2 = document.getElementById('myChart2');
+
+    new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: decodedLabels,
+            datasets: [
+                {
+                    label: 'Visited',
+                    data: decodedVisited,
+                    borderWidth: 2,
+                    pointRadius: 2,
+                    backgroundColor: 'steelblue',
+                    xAxisID: 'bar-x-axis2'
+  
+                },
+                {
+                label: 'Goal Line',
+                data: decodedGoalline,
+                borderWidth: 2,
+                pointRadius: 2,
+                backgroundColor: 'lightsteelblue',
+                xAxisID: 'bar-x-axis1',
+                     pointLabels: {
+                        fontSize: 0,
+                    }
+                }
+            ]
+        },
+        options: {
+            scales: {
+                xAxes: [{
+                    id: 'bar-x-axis1',
+                    
+                   
+                },
+                {
+                    id: 'bar-x-axis2',
+                    offset: true
+                   
+
+                }],
+                yAxes: [{
+                   
+                    
+                   
+                }]
+            }
+        }
+    });
+
 </script>

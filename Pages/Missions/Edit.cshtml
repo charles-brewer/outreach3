@@ -87,9 +87,9 @@
      {    
          var number = mapMarkers.length + 1;
 
-         if(number>48)
+         if(number>80)
          {
-             alert("Markers are limited to 48 per mission.  Please create a second mission if needed.");
+             alert("Markers are limited to 80 per mission.  Please create a second mission if needed.");
              return;
          }
          
@@ -112,9 +112,9 @@
          var marker = new google.maps.Marker({
             position: location,                       
             icon: iconText, 
-            forecolor: foreColor,
             draggable: true,
             label: oneToEight.toString(),   
+            color:foreColor,
             tag: number,
             map: map
         });
@@ -209,19 +209,40 @@
             }
             if (num > 24 && num < 33)
             {
-                markColor= "red";
+                markColor= "white";
                 foreColor= "white";
             }
             if (num > 32 && num < 41)
             {
-                markColor= "white";
+                markColor= "red";
                 foreColor= "navy";
             }
-            if (num > 40)
+           if (num > 40 && num < 49)
             {
                 markColor= "yellow";
                 foreColor= "navy";
             }
+            if (num > 48 && num < 57)
+            {
+                markColor= "aqua";
+                foreColor= "navy";
+            }
+            if (num > 56 && num < 65)
+            {
+                markColor= "teal";
+                foreColor= "navy";
+            }
+            if (num > 64 && num < 73)
+            {
+                markColor= "beige";
+                foreColor= "navy";
+            }
+            if (num > 72 && num < 81)
+            {
+                markColor= "gold";
+                foreColor= "white";
+            }
+           
             
          
     }

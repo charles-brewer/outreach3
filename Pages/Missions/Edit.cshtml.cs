@@ -21,6 +21,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using outreach3.Data;
 using outreach3.Data.Ministries;
+using outreach3.wwwroot.lib.ChartModels;
 
 namespace outreach3.Pages.Missions
 {
@@ -188,15 +189,19 @@ namespace outreach3.Pages.Missions
             var mission = _context.Missions.Where(m=>m.MissionId == missionId).FirstOrDefault();
             var missionMap = _context.MissionMaps.Where(mm => mm.MissionMapId == mission.MissionMapId).FirstOrDefault();
 
+            var markerData = Request.Form["inpMapMarkerData"];
             if (missionMap != null)
             {
                 missionMap.MapData = Request.Form["inpMapData"];
                 missionMap.MapZoom = Request.Form["inpMapZoom"];
                 missionMap.MapHeading = Request.Form["inpMapHeading"];
                 missionMap.MapTilt = Request.Form["inpMapTilt"];
-                var markerData = Request.Form["inpMapMarkerData"];
+                
                 var allMarkerData = Request.Form["allMarkerData"];
                 var movedMarkers = Request.Form["inpMovedMapMarkerData"].ToString();
+
+                //_context.Residents.RemoveRange(_context.Residents.Where(r => r.MissionId == missionId));
+                //_context.SaveChanges();
 
                 //Save the Map Marker
                 foreach (var marker in markerData.ToString().Split("|"))
@@ -223,9 +228,7 @@ namespace outreach3.Pages.Missions
                         mrkr.Number = markerNum;
                         mrkr.LatLng = markerDataParts[1];
                         mrkr.Color = GetColor(markerNum).Item1;                       
-                        mrkr.Label = markerDataParts[3];
-                        
-
+                        mrkr.Label = markerDataParts[3];         
                         mrkr.MissionMapId = mission.MissionMapId;
                         mrkr.Title = markerDataParts[2];
                     }
@@ -234,14 +237,13 @@ namespace outreach3.Pages.Missions
                     if (addNew)
                     {
                         _context.MapMarkers.Add(mrkr);
-                    }
-
-                 
-                    SaveStaticMap(missionMap, markerData);
-                   CreateResident(mrkr, missionId, markerDataParts[2]);
-
-
+                    }        
+                    CreateResident(mrkr, missionId, markerDataParts[2]); 
+                    
                 }
+                
+                SaveStaticMap(missionMap, markerData);
+
             }
             churchId = _context.Missions.Where(m => m.MissionId == missionId).FirstOrDefault().ChurchId;
             churchName = _context.Churches.Where(c => c.ChurchId == churchId).FirstOrDefault().Name;
@@ -254,6 +256,11 @@ namespace outreach3.Pages.Missions
 
         private void SaveStaticMap(MissionMap? missionMap, string mapMarkerData)
         {
+
+            var path = Server.MapPath("maps/map_" + missionMap.MissionMapId + ".png");
+
+
+
             var mapData = missionMap.MapData;
             var mapDatas = mapData.Split("|".ToCharArray());
             var mapCenter = missionMap.MapData.ToString().Replace("{lat:", "").Replace("lng:", "").Replace("}", "");
@@ -278,10 +285,10 @@ namespace outreach3.Pages.Missions
                 {
                     oneToEight-=8;
                 }             
-                var url = $"https://wfwcoutreach.com/Images/Markers/"+ color + ".png";               
+                var url = $"https://www.wfwcoutreach.com/Images/"+ color + ".png";               
                 var lbl = num;
                 var latlng = mMarker.LatLng.Replace("(", "").Replace(")", "");
-                MarkerText += "&markers=label:" + oneToEight + "%7Ccolor:" + color + "%7C" + latlng;                
+                MarkerText += "&markers=color:" + color + "%7Clabel:" + oneToEight + "%7C" + latlng;                
             }
             img += "&scale=2" + MarkerText;
 
@@ -291,7 +298,7 @@ namespace outreach3.Pages.Missions
             {
                 Microsoft.AspNetCore.Hosting.IWebHostEnvironment _hostingEnvironment = this.webHostEnvironment;
 
-                var path = Server.MapPath("maps/map_" + missionMap.MissionMapId + ".png");
+                
 
                 using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
@@ -319,15 +326,31 @@ namespace outreach3.Pages.Missions
             }
             if (num is >= 25 and <= 32)
             {
-                return ("red", "white");
+                return ("white", "navy");
             }
             if (num is >= 33 and <= 40)
             {
-                return ("white", "navy");
+                return ("red", "white");
             }
-            if (num is >= 40)
+            if (num is >= 41 and <= 48)
             {
                 return ("yellow", "navy");
+            }
+            if (num is >= 49 and <= 56)
+            {
+                return ("aqua", "navy");
+            }
+            if (num is >= 57 and <= 64)
+            {
+                return ("teal", "white");
+            }
+            if (num is >= 65 and <= 72)
+            {
+                return ("beige", "navy");
+            }
+            if (num is >= 73 and <= 80)
+            {
+                return ("gold", "white");
             }
             return ("black", "white");
         }
@@ -340,6 +363,19 @@ namespace outreach3.Pages.Missions
 
         private void CreateResident(MapMarker mapMarker, int missionId, string newAddress)
         {
+
+
+
+            var residentCount = _context.Residents.Count(r => r.Address == newAddress) + 1;
+
+            var stringMissionTitles = "";
+            var missionTitles = _context.Residents.Where(r => r.Address == newAddress).Select(s => s.Mission.Name).ToList();
+            foreach(var missionTitle in missionTitles)
+            {
+                stringMissionTitles = stringMissionTitles + missionTitle + "\n";
+            }
+                       
+
             if (!_context.Residents.Any(r => r.number == mapMarker.Number && r.MissionId == missionId))
             {
                 var newResident = new Resident();
@@ -349,7 +385,13 @@ namespace outreach3.Pages.Missions
                 newResident.ForeColor = GetColor(mapMarker.Number).Item2;
                 newResident.BackColor = GetColor(mapMarker.Number).Item1;
                 newResident.MissionId = missionId;
+                newResident.NumberOfMissions = residentCount;
+                newResident.TitlesOfMissions = stringMissionTitles;
+
                 _context.Residents.Add(newResident);
+
+                _context.Missions.FirstOrDefault(m=>m.MissionId==missionId).Residents.Add(newResident);
+                _context.SaveChanges();
             }
             else
             {
@@ -359,6 +401,15 @@ namespace outreach3.Pages.Missions
                 resident.OneToEight = Convert.ToInt32(mapMarker.Label);
                 resident.ForeColor = GetColor(mapMarker.Number).Item2;
                 resident.BackColor = GetColor(mapMarker.Number).Item1;
+                resident.NumberOfMissions = residentCount;
+                resident.TitlesOfMissions = stringMissionTitles;
+                var residentBeforeId = resident.ResidentId;
+                _context.SaveChanges();
+
+                foreach(var visit in _context.Visitations.Where(v=>v.ResidentId==residentBeforeId))
+                {
+                    var vv = visit.VisitationDetails;
+                }
             }             
         }
     }

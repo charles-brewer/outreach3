@@ -129,26 +129,40 @@ namespace outreach3.Pages.Residents
             }
             if (num is >= 25 and <= 32)
             {
-                return ("red", "white");
+                return ("white", "navy");
             }
             if (num is >= 33 and <= 40)
             {
-                return ("white", "navy");
+                return ("red", "white");
             }
-            if (num is >= 40)
+            if (num is >= 41 and <= 48)
             {
                 return ("yellow", "navy");
             }
+            if (num is >= 49 and <= 56)
+            {
+                return ("aqua", "navy");
+            }
+            if (num is >= 57 and <= 64)
+            {
+                return ("teal", "white");
+            }
+            if (num is >= 65 and <= 72)
+            {
+                return ("beige", "navy");
+            }
+            if (num is >= 73 and <= 80)
+            {
+                return ("gold", "white");
+            }
             return ("black", "white");
         }
-
         public async Task<IActionResult> OnPostSaveAsync(int missionId)
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
             SelectedResident.MissionId = missionId;
+            SelectedResident.Mission = _context.Missions.FirstOrDefault(m => m.MissionId == missionId);
+            
+            
 
             _context.Attach(SelectedResident).State = EntityState.Modified;
 
@@ -195,7 +209,7 @@ namespace outreach3.Pages.Residents
                 // return Page();
             }
               visitation.ResidentId = residentId;
-            _context.Visitations.Add(visitation);
+            _context.Residents.FirstOrDefault(r => r.ResidentId == residentId).Visitations.Add(visitation);
 
             _context.SaveChanges();
 

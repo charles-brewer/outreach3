@@ -84,7 +84,7 @@
      {    
          var number = mapMarkers.length + 1;
          /*  1:  Set Color and Label  */
-         setColors(number);         
+                  
          var oneToEight = number;
          while(oneToEight > 8)
          {
@@ -95,8 +95,8 @@
             position: location,                       
             icon: "https://wfwcoutreach.com/wwwroot/Images/" + markColor + ".png",
             forecolor: foreColor,
-            draggable: true,
-            label: oneToEight.toString(),   
+            draggable: false,
+            label: ".",   
             tag: number,
             map: map
         }); 
@@ -124,50 +124,9 @@
     }
     
     var markColor = "blue";
-    var foreColor = "white";
+    var foreColor = "blue";
     
-    function setColors(num)
-    {
-
-        while(num > 48)
-        {
-            num-=48;
-        }
-
-          if(num > 0 && num < 9)
-            {
-                markColor= "blue";
-                foreColor= "white";
-            }
-            if (num > 8 && num < 17)
-            {
-                markColor= "brown";
-                foreColor= "white";
-            }
-            if (num > 16 && num < 25)
-            {
-                markColor= "green";
-                foreColor= "white";
-            }
-            if (num > 24 && num < 33)
-            {
-                markColor= "red";
-                foreColor= "white";
-            }
-            if (num > 32 && num < 41)
-            {
-                markColor= "white";
-                foreColor= "navy";
-            }
-            if (num > 40)
-            {
-                markColor= "yellow";
-                foreColor= "navy";
-            }
-            
-         
-    }
-
+   
                      
         
 

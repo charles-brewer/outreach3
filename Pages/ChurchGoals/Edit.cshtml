@@ -5,52 +5,113 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
 
-<h4>ChurchGoal</h4>
+<h4>Edit Church Goal</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ChurchGoal.ChurchGoalId" />
+<div class="rightDiv">
+    <a asp-page="./Index" asp-route-churchId="@Request.Query["churchId"]">Return to Goals List</a>
+</div>
 
-            <div class="form-group">
-                <label asp-for="ChurchGoal.Name" class="control-label"></label>
-                <input asp-for="ChurchGoal.Name" class="form-control" />
-                <span asp-validation-for="ChurchGoal.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ChurchGoal.StartDate" class="control-label"></label>
-                <input asp-for="ChurchGoal.StartDate" class="form-control" />
-                <span asp-validation-for="ChurchGoal.StartDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ChurchGoal.GoalDate" class="control-label"></label>
-                <input asp-for="ChurchGoal.GoalDate" class="form-control" />
-                <span asp-validation-for="ChurchGoal.GoalDate" class="text-danger"></span>
-            </div>          
-            <div class="form-group">
-                <label asp-for="ChurchGoal.NumberOfDoorsGoal" class="control-label"></label>
-                <input asp-for="ChurchGoal.NumberOfDoorsGoal" class="form-control" />
-                <span asp-validation-for="ChurchGoal.NumberOfDoorsGoal" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ChurchGoal.NumberOfGreetsGoal" class="control-label"></label>
-                <input asp-for="ChurchGoal.NumberOfGreetsGoal" class="form-control" />
-                <span asp-validation-for="ChurchGoal.NumberOfGreetsGoal" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<form method="post">
+    <div class="divRounded">
+        <table>
+            <tr>
+                <td class="tdWide">
+                    <div class="row">
+                        <div class="col-md-8">
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="ChurchGoal.ChurchGoalId" />
+
+                            <div class="form-group">
+                                <label asp-for="ChurchGoal.Name" class="control-label"></label>
+                                <input asp-for="ChurchGoal.Name" class="form-control" />
+                                <span asp-validation-for="ChurchGoal.Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ChurchGoal.StartDate" class="control-label"></label>
+                                <input asp-for="ChurchGoal.StartDate" class="form-control" />
+                                <span asp-validation-for="ChurchGoal.StartDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ChurchGoal.GoalDate" class="control-label"></label>
+                                <input asp-for="ChurchGoal.GoalDate" class="form-control" />
+                                <span asp-validation-for="ChurchGoal.GoalDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ChurchGoal.NumberOfDoorsGoal" class="control-label"></label>
+                                <input asp-for="ChurchGoal.NumberOfDoorsGoal" readonly class="form-control" />
+                                <span asp-validation-for="ChurchGoal.NumberOfDoorsGoal" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ChurchGoal.NumberOfGreetsGoal" class="control-label"></label>
+                                <input asp-for="ChurchGoal.NumberOfGreetsGoal" readonly class="form-control" />
+                                <span asp-validation-for="ChurchGoal.NumberOfGreetsGoal" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <input type="submit" value="Reset" class="btn btn-primary" asp-route-churchId="@Request.Query["churchId"]" asp-route-churchGoalId="@Request.Query["churchGoalId"]" asp-page-handler="Reset" />
+                                        </td>
+                                        <td>
+                                            <input type="submit" value="Save" class="btn btn-primary" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </td>
+                <td class="tdWide">
+                    <div class="row">
+                        <div style='width:400px;padding:10px;border:2px outset gray;color:red;display:@Model.DisplayError;font-weight:bold;'>@Model.Error
+
+                            <div class="rightDiv">
+                                <input type="submit" asp-page="./Edit" formmethod="post" asp-page-handler="OK" value="OK" asp-route-churchGoalId="@Request.Query["churchGoalId"]" asp-route-churchId="@Request.Query["churchId"]" />
+                            </div>
+                        </div>
+                        <label asp-for="AllMissions" class="control-label">Missions</label><br />
+                        <select style="width:400px;" size="10" name="allMissions" asp-items="Model.AllMissions">
+                        </select>
+
+                        <div>
+                            <div>
+                                <table>
+                                    <tr class="align-content-md-stretch">
+                                        <td>
+                                            <input asp-page="./Edit" asp-route-churchGoalId="@Request.Query["churchGoalId"]" asp-route-churchId="@Request.Query["churchId"]" name="btnAdd" asp-page-handler="Add" method="post" type="submit" value="Add" class="btn btn-primary" />
+                                        </td>
+                                        <td>
+                                            <input asp-page="./Edit" asp-route-churchGoalId="@Request.Query["churchGoalId"]" asp-route-churchId="@Request.Query["churchId"]" name="btnDelete" asp-page-handler="Delete" method="post" type="submit" value="Remove" class="btn btn-primary" />
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+
+                                <label asp-for="GoalMissions" class="control-label"></label><br />
+                                <select style="width:400px;" size="10" name="goalMissions" asp-items="Model.GoalMissions"></select>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </td>
+            </tr>
+        </table>
+
     </div>
-</div>
+</form>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

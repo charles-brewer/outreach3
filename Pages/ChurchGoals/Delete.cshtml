@@ -11,6 +11,10 @@
 <div>
     <h4>ChurchGoal</h4>
     <hr />
+
+    <div class=" rightDiv">
+        <a asp-page="./Index" asp-route-churchId="@Request.Query["churchId"]">Return to Church Goals</a>
+    </div>
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ChurchGoal.StartDate)
@@ -53,6 +57,6 @@
     <form method="post">
         <input type="hidden" asp-for="ChurchGoal.ChurchGoalId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-page="./Index">Back to List</a>
+        
     </form>
 </div>

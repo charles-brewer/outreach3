@@ -1,5 +1,8 @@
-﻿namespace outreach3.Data.Ministries
-{
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace outreach3.Data.Ministries
+{ 
+
     public class ChurchGoal
     {
         private int _churchId;
@@ -10,6 +13,7 @@
 
         public string Name { get; set; }
 
+       
         public int ChurchGoalId
         {
             get;set;
@@ -29,16 +33,18 @@
 
         public int NumberOfConnections { get; set; }
 
-        //public int NumberOfDoors { get; set; }
+        public int NumberOfDoors { get; set; }
 
-        //public int NumberOfResidentsInGoal { get; set; }
+        public int NumberOfConnectionsGoal { get; set; }
 
         //public int NumberOfDoorHangersLeft { get; set; }
 
-        public int NumberOfDoorsGoal { get; set; }
+        public int NumberOfDoorsGoal { get; set; } = 0;
 
-        public int NumberOfGreetsGoal { get; set; }
+        public int NumberOfGreetsGoal { get; set; } = 0;
         //public int NumberOfConnectionsMade { get; set; }
+
+
 
 
     }

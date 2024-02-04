@@ -8,26 +8,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Pages\ChurchGoals\**" />
     <Compile Remove="Pages\Mission\**" />
     <Compile Remove="wwwroot\Content\**" />
     <Compile Remove="~\**" />
-    <Content Remove="Pages\ChurchGoals\**" />
     <Content Remove="Pages\Mission\**" />
     <Content Remove="wwwroot\Content\**" />
     <Content Remove="~\**" />
-    <EmbeddedResource Remove="Pages\ChurchGoals\**" />
     <EmbeddedResource Remove="Pages\Mission\**" />
     <EmbeddedResource Remove="wwwroot\Content\**" />
     <EmbeddedResource Remove="~\**" />
-    <None Remove="Pages\ChurchGoals\**" />
     <None Remove="Pages\Mission\**" />
     <None Remove="wwwroot\Content\**" />
     <None Remove="~\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\Ministries\ChurchGoal.cs" />
     <Compile Remove="Pages\Missions\Addresses.cshtml.cs" />
   </ItemGroup>
 
@@ -53,18 +48,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="wwwroot\documentation\OutreachMinistries.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Pages\Missions\blue.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Chart.js" Version="3.7.1" />
+    <PackageReference Include="Coravel" Version="5.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.11" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.6" />
@@ -74,6 +65,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.10" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Select.HtmlToPdf.NetCore" Version="23.1.0" />
@@ -94,17 +87,25 @@
     <None Include="Pages\Churches\ErrorTest.cshtml" />
     <None Include="Pages\Churches\Index.cshtml" />
     <None Include="Pages\Churches\Stats.cshtml" />
+    <None Include="Pages\ChurchGoals\Create.cshtml" />
+    <None Include="Pages\ChurchGoals\Delete.cshtml" />
+    <None Include="Pages\ChurchGoals\Details.cshtml" />
+    <None Include="Pages\ChurchGoals\Edit.cshtml" />
+    <None Include="Pages\ChurchGoals\Index.cshtml" />
     <None Include="Pages\Residents\Create.cshtml" />
     <None Include="Pages\Residents\Delete.cshtml" />
     <None Include="Pages\Residents\Details.cshtml" />
     <None Include="Pages\Residents\Edit.cshtml" />
     <None Include="Pages\Residents\Index.cshtml" />
-    <None Include="wwwroot\documentation\OutreachMinistries.pdf" />
+    <None Include="wwwroot\lib\chartjs\Chart.bundle.js" />
+    <None Include="wwwroot\lib\chartjs\Chart.bundle.min.js" />
+    <None Include="wwwroot\lib\chartjs\Chart.js" />
+    <None Include="wwwroot\lib\chartjs\Chart.min.js" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Content\Charts\" />
     <Folder Include="Content\Missions\" />
-    <Folder Include="wwwroot\lib\ChartModels\" />
     <Folder Include="wwwroot\maps\" />
   </ItemGroup>
 

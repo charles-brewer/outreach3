@@ -38,7 +38,7 @@
 </div>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="Index" asp-route-residentId="@Request.Query["residentId"]" asp-route-missionId="@Request.Query["missionId"]" asp-route-churchId="@Request.Query["churchId"]">Back to List</a>
 </div>
 
 @section Scripts {

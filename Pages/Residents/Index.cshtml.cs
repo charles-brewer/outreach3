@@ -6,6 +6,7 @@ using System.Xml;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 using outreach3.Data.Ministries;
 
 namespace outreach3.Pages.Residents
@@ -19,6 +20,7 @@ namespace outreach3.Pages.Residents
             _context = context;
            
         }
+        
 
         public FollowUp FollowUp { get; set; }
 
@@ -37,13 +39,16 @@ namespace outreach3.Pages.Residents
         {
             ChurchId = Request.Query["churchId"];
             MissionName = _context.Missions.FirstOrDefault(m => m.MissionId == missionId).Name;
-            if (_context.Residents.Any(r=>r.MissionId==missionId))
+            if (_context.Residents.Any(r => r.MissionId == missionId))
             {
-                Residents = await _context.Residents.Where(r=>r.MissionId==missionId).OrderBy(s=>s.number).ToListAsync();
+                Residents = await _context.Residents.Where(r => r.MissionId == missionId).OrderBy(s => s.number).ToListAsync();
             }
-
+            foreach (var res in Residents.Where(r => r.Visitations.Intersect(r.Visitations).Count()==0)) 
+            {
+                res.Visitations.AddRange(_context.Visitations.Where(v => v.ResidentId == res.ResidentId));
+            }
         }
-
-
     }
+
+   
 }

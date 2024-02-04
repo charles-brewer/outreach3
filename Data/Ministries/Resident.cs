@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
 
 namespace outreach3.Data.Ministries
@@ -20,7 +21,6 @@ namespace outreach3.Data.Ministries
         private string foreColor = "";
         private string backColor = "";
 
-        private List<Visitation> aquaintances = new List<Visitation>();
 
 
 
@@ -33,7 +33,7 @@ namespace outreach3.Data.Ministries
 
         public int MissionId { get; set; }
 
-
+        public virtual Mission Mission { get; set; } = null!;   
 
         public string? HomePhone { get => homePhone; set => homePhone = value; }
 
@@ -50,6 +50,9 @@ namespace outreach3.Data.Ministries
 
         public string? BackColor { get => backColor; set => backColor = value; }
 
+        public string TitlesOfMissions { get; set; } = "";
+        public int NumberOfMissions { get; set; }
+
 
         private int _number;
         public int number
@@ -65,11 +68,12 @@ namespace outreach3.Data.Ministries
             set { _oneToEight = value; }
         }
 
-
-        public virtual List<Visitation>? Visitations { get; set; } = new List<Visitation>();
+       
+        public ICollection<Visitation>? Visitations { get; set; } = new List<Visitation>();
         public int? FollowUpId { get; set; }
 
 
 
     }
+   
 }

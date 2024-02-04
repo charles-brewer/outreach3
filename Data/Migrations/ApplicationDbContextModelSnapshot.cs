@@ -254,7 +254,7 @@ namespace outreach3.Data.Migrations
 
                     b.HasKey("ChurchId");
 
-                    b.ToTable("Churches", (string)null);
+                    b.ToTable("Churches");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.ChurchGoal", b =>
@@ -278,7 +278,7 @@ namespace outreach3.Data.Migrations
                     b.Property<int>("NumberOfConnections")
                         .HasColumnType("int");
 
-                    b.Property<int>("NumberOfConnectionsMade")
+                    b.Property<int>("NumberOfConnectionsGoal")
                         .HasColumnType("int");
 
                     b.Property<int>("NumberOfDoors")
@@ -295,9 +295,22 @@ namespace outreach3.Data.Migrations
 
                     b.HasKey("ChurchGoalId");
 
-                    b.HasIndex("ChurchId");
+                    b.ToTable("ChurchGoals");
+                });
 
-                    b.ToTable("ChurchGoals", (string)null);
+            modelBuilder.Entity("outreach3.Data.Ministries.ChurchMembers", b =>
+                {
+                    b.Property<int>("ChurchId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MemberId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ChurchId", "MemberId");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("ChurchMembers");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.FollowUp", b =>
@@ -324,7 +337,7 @@ namespace outreach3.Data.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("FollowUp", (string)null);
+                    b.ToTable("FollowUp");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.MapMarker", b =>
@@ -369,7 +382,7 @@ namespace outreach3.Data.Migrations
 
                     b.HasIndex("MissionMapId");
 
-                    b.ToTable("MapMarkers", (string)null);
+                    b.ToTable("MapMarkers");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.Member", b =>
@@ -395,7 +408,7 @@ namespace outreach3.Data.Migrations
 
                     b.HasKey("MemberId");
 
-                    b.ToTable("Members", (string)null);
+                    b.ToTable("Members");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.Mission", b =>
@@ -418,6 +431,9 @@ namespace outreach3.Data.Migrations
                     b.Property<DateTime?>("DateLastCompleted")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("GoalId")
+                        .HasColumnType("int");
+
                     b.Property<int>("MissionMapId")
                         .HasColumnType("int");
 
@@ -435,7 +451,7 @@ namespace outreach3.Data.Migrations
 
                     b.HasIndex("MissionMapId");
 
-                    b.ToTable("Missions", (string)null);
+                    b.ToTable("Missions");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.MissionMap", b =>
@@ -463,7 +479,7 @@ namespace outreach3.Data.Migrations
 
                     b.HasKey("MissionMapId");
 
-                    b.ToTable("MissionMaps", (string)null);
+                    b.ToTable("MissionMaps");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.Resident", b =>
@@ -504,8 +520,15 @@ namespace outreach3.Data.Migrations
                     b.Property<int>("MissionId")
                         .HasColumnType("int");
 
+                    b.Property<int>("NumberOfMissions")
+                        .HasColumnType("int");
+
                     b.Property<int>("OneToEight")
                         .HasColumnType("int");
+
+                    b.Property<string>("TitlesOfMissions")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("number")
                         .HasColumnType("int");
@@ -514,7 +537,7 @@ namespace outreach3.Data.Migrations
 
                     b.HasIndex("MissionId");
 
-                    b.ToTable("Residents", (string)null);
+                    b.ToTable("Residents");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.Visitation", b =>
@@ -530,6 +553,9 @@ namespace outreach3.Data.Migrations
 
                     b.Property<bool>("DoorHangar")
                         .HasColumnType("bit");
+
+                    b.Property<int>("MissionId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ResidentId")
                         .HasColumnType("int");
@@ -547,7 +573,7 @@ namespace outreach3.Data.Migrations
 
                     b.HasIndex("ResidentId");
 
-                    b.ToTable("Visitations", (string)null);
+                    b.ToTable("Visitations");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.VisitationsMembers", b =>
@@ -562,7 +588,7 @@ namespace outreach3.Data.Migrations
 
                     b.HasIndex("VisitationId");
 
-                    b.ToTable("VisitationMembers", (string)null);
+                    b.ToTable("VisitationMembers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -616,13 +642,23 @@ namespace outreach3.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("outreach3.Data.Ministries.ChurchGoal", b =>
+            modelBuilder.Entity("outreach3.Data.Ministries.ChurchMembers", b =>
                 {
-                    b.HasOne("outreach3.Data.Ministries.Church", null)
-                        .WithMany("Goals")
+                    b.HasOne("outreach3.Data.Ministries.Church", "Church")
+                        .WithMany()
                         .HasForeignKey("ChurchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("outreach3.Data.Ministries.Member", "Member")
+                        .WithMany()
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Church");
+
+                    b.Navigation("Member");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.FollowUp", b =>
@@ -664,20 +700,24 @@ namespace outreach3.Data.Migrations
 
             modelBuilder.Entity("outreach3.Data.Ministries.Resident", b =>
                 {
-                    b.HasOne("outreach3.Data.Ministries.Mission", null)
+                    b.HasOne("outreach3.Data.Ministries.Mission", "Mission")
                         .WithMany("Residents")
                         .HasForeignKey("MissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Mission");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.Visitation", b =>
                 {
-                    b.HasOne("outreach3.Data.Ministries.Resident", null)
+                    b.HasOne("outreach3.Data.Ministries.Resident", "Resident")
                         .WithMany("Visitations")
                         .HasForeignKey("ResidentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Resident");
                 });
 
             modelBuilder.Entity("outreach3.Data.Ministries.VisitationsMembers", b =>
@@ -701,8 +741,6 @@ namespace outreach3.Data.Migrations
 
             modelBuilder.Entity("outreach3.Data.Ministries.Church", b =>
                 {
-                    b.Navigation("Goals");
-
                     b.Navigation("Missions");
                 });
 

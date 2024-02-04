@@ -49,7 +49,7 @@ namespace outreach3.Pages.ChurchGoals
             _context.ChurchGoals.Add(ChurchGoal);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Index", new { churchId = Request.Query["churchId"] });
         }
     }
 }

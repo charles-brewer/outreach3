@@ -36,6 +36,9 @@ namespace outreach3.Pages.Visitations
         public int ResidentId { get; set; }
         public SelectList Options { get; set; }
 
+       
+
+
         public async Task<IActionResult> OnGetAsync(int residentId, int visitationId, int missionId)
         {
             if (visitationId == null)
@@ -65,9 +68,11 @@ namespace outreach3.Pages.Visitations
 
             Options = new SelectList(_context.Members.Where(m=>m.ChurchId==churchId), nameof(Member.MemberId), nameof(Member.Name));           
             
-            Options.Select(e => e.Selected);        
+            Options.Select(e => e.Selected);
+
             
-          
+
+
                 return Page();
         }
 
@@ -110,7 +115,7 @@ namespace outreach3.Pages.Visitations
         {
             if (!ModelState.IsValid)
             {
-                return Page();
+               // return Page();
             }
 
             _context.Attach(Visitation).State = EntityState.Modified;
@@ -132,16 +137,13 @@ namespace outreach3.Pages.Visitations
                     VisitationId = Visitation.VisitationId
 
                 };
-                Visitation.VisitationMembers.Add(vm);
-            }
-            
-
-
-
+                if (Visitation.VisitationMembers.FirstOrDefault(v => v.MemberId == selectedMemberId) == null)
+                {
+                    Visitation.VisitationMembers.Add(vm);
+                }
+            }            
             try
             {
-
-
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -168,7 +170,7 @@ namespace outreach3.Pages.Visitations
 
             if (!ModelState.IsValid)
             {
-                return Page();
+               // return Page();
             }
 
             _context.Attach(Visitation).State = EntityState.Modified;
@@ -238,6 +240,7 @@ namespace outreach3.Pages.Visitations
             _context.Attach(Visitation).State = EntityState.Modified;
 
             Visitation.ResidentId = Convert.ToInt32(Request.Query["residentId"]);
+            Visitation.MissionId = Convert.ToInt32(Request.Query["missionId"]);
             Visitation.ChurchId = Convert.ToInt32(Request.Query["churchId"]);
             
 
@@ -258,6 +261,14 @@ namespace outreach3.Pages.Visitations
             }
 
             return RedirectToPage("./Edit", new { churchId=Request.Query["churchId"], missionId = Request.Query["missionId"], residentId = Request.Query["residentId"], visitationId = Visitation.VisitationId });
+        }
+
+        public async Task<IActionResult>OnPostCancelAsync()
+        {
+            _context.Visitations.Remove(Visitation);
+            await _context.SaveChangesAsync();
+            return RedirectToPage("../Residents/Edit", new { churchId = Request.Query["churchId"], missionId = Request.Query["missionId"], residentId = Request.Query["residentId"] });
+
         }
 
 

@@ -12,7 +12,12 @@ namespace outreach3.Data.Ministries
 
         public DateTime VisitationDate { get; set; }
 
+
+        [ForeignKey("Resident")]
         public int ResidentId { get; set; }
+        public Resident Resident { get; set; }
+
+        public int MissionId { get; set; }
 
         public int ChurchId { get; set; }
         public string? VisitationDetails { get; set; }
@@ -21,7 +26,7 @@ namespace outreach3.Data.Ministries
 
         public TypeVisit VisitationType { get; set; } = TypeVisit.None;
 
-        public List<VisitationsMembers> VisitationMembers { get; set; } = new List<VisitationsMembers>();
+        public ICollection<VisitationsMembers> VisitationMembers { get; set; } = new List<VisitationsMembers>();
     }
     public enum TypeVisit
     {

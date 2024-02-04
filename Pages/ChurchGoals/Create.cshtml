@@ -31,34 +31,14 @@
                 <span asp-validation-for="ChurchGoal.GoalDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ChurchGoal.NumberOfDoorsGoal" class="control-label"></label>
-                <input asp-for="ChurchGoal.NumberOfDoorsGoal" class="form-control" />
-                <span asp-validation-for="ChurchGoal.NumberOfDoorsGoal" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ChurchGoal.NumberOfConnections" class="control-label"></label>
-                <input asp-for="ChurchGoal.NumberOfConnections" class="form-control" />
-                <span asp-validation-for="ChurchGoal.NumberOfConnections" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ChurchGoal.NumberOfDoorsGoal" class="control-label"></label>
-                <input asp-for="ChurchGoal.NumberOfDoorsGoal" class="form-control" />
-                <span asp-validation-for="ChurchGoal.NumberOfDoorsGoal" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ChurchGoal.NumberOfGreetsGoal" class="control-label"></label>
-                <input asp-for="ChurchGoal.NumberOfGreetsGoal" class="form-control" />
-                <span asp-validation-for="ChurchGoal.NumberOfGreetsGoal" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary" asp-route-churchId="@Request.Query["churchId"]" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="Index" asp-route-churchId="@Request.Query["churchId"]">Back to List</a>
 </div>
 
 @section Scripts {
